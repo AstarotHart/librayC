@@ -71,6 +71,9 @@ typedef struct uri
 libro libro1;
 monografia monografia1;
 articulo articulo1;
+audio audio1;
+video video1;
+uri uri1;
 
 FILE* archivo= NULL;
 char* nombrearchivo = "Library.txt";
@@ -153,110 +156,230 @@ void menu_config_metadatos (void)
 
 /* ----------------------- FUNCIONES RECURSOS ----------------------- */
 
-// Ingresar LIBRO
-void crear_recurso_libro (void)
+void crear_recurso (int opcion)
 {	
-    archivo= fopen(nombrearchivo, "a"); //abro el archivo
 	
-    //Ingresar datos
-    printf("Ingrese ISBN: ");
-    fflush(stdin);
-    scanf("%d",&libro1.ISBN);
-    
-    printf("\ningrese el Titulo: ");
-    fflush(stdin);
-    gets(libro1.titulo);
-    
-    printf("\nIngrese el Autor(es): ");
-    fflush(stdin);
-    gets(libro1.autors);
-    
-    printf("\nIngrese Tema: ");
-    fflush(stdin);
-    gets(libro1.tema);
-    
-    printf("\nIngrese el Anio de Pulicacion: ");
-    fflush(stdin);
-    scanf("%d",&libro1.anio_publicacion);
-    
-    //imprimo los valores
-    //printf("ISBN: %d\nTITULO: %s \nAUTOR: %s \nTEMA: %s \nA. PUBLIC: %d",libro1.ISBN, libro1.titulo, libro1.autors, libro1.tema, libro1.anio_publicacion);
-    
-    // Escribir datos en el archivo
-    fprintf(archivo,"libro|");
-    fprintf(archivo,"%d|",libro1.ISBN);
-    fprintf(archivo,"%s|",libro1.titulo);
-    fprintf(archivo,"%s|",libro1.autors);
-    fprintf(archivo,"%s|",libro1.tema);
-    fprintf(archivo,"%d.\n",libro1.anio_publicacion);
-    
-    fclose(archivo);
-}
+	switch(opcion)
+	{	
+		case 1:	/*RECURSO LIBRO*/
 
-// Ingresar MONOGRAFIA
-void crear_recurso_monografia (void)
-{	
-
-    archivo= fopen(nombrearchivo, "a"); //abro el archivo
+				//se abre el archivo
+				archivo= fopen(nombrearchivo, "a"); //abro el archivo
 	
-    //Ingresar datos 
-    printf("\ningrese el Titulo: ");
-    fflush(stdin);
-    gets(monografia1.titulo);
-    
-    printf("\nIngrese el Autor(es): ");
-    fflush(stdin);
-    gets(monografia1.autors);
-    
-    printf("\nIngrese Tema: ");
-    fflush(stdin);
-    gets(monografia1.tema);
+			    //Ingresar datos
+			    printf("Ingrese ISBN: ");
+			    fflush(stdin);
+			    scanf("%d",&libro1.ISBN);
+			    
+			    printf("\ningrese el Titulo: ");
+			    fflush(stdin);
+			    gets(libro1.titulo);
+			    
+			    printf("\nIngrese el Autor(es): ");
+			    fflush(stdin);
+			    gets(libro1.autors);
+			    
+			    printf("\nIngrese Tema: ");
+			    fflush(stdin);
+			    gets(libro1.tema);
+			    
+			    printf("\nIngrese el Anio de Pulicacion: ");
+			    fflush(stdin);
+			    scanf("%d",&libro1.anio_publicacion);
+			    
+			    //imprimo los valores
+			    //printf("ISBN: %d\nTITULO: %s \nAUTOR: %s \nTEMA: %s \nA. PUBLIC: %d",libro1.ISBN, libro1.titulo, libro1.autors, libro1.tema, libro1.anio_publicacion);
+			    
+			    // Escribir datos en el archivo
+			    fprintf(archivo,"libro|");
+			    fprintf(archivo,"%d|",libro1.ISBN);
+			    fprintf(archivo,"%s|",libro1.titulo);
+			    fprintf(archivo,"%s|",libro1.autors);
+			    fprintf(archivo,"%s|",libro1.tema);
+			    fprintf(archivo,"%d.\n",libro1.anio_publicacion);
+			    
+			    fclose(archivo);
+			    
+			    break;
+			    
+		case 2:	/*RECURSO MONOGRAFIA*/
 
-    // Escribir datos en el archivo
-    fprintf(archivo,"monografia|");
-    fprintf(archivo,"%s|",monografia1.titulo);
-    fprintf(archivo,"%s|",monografia1.autors);
-    fprintf(archivo,"%s.\n",monografia1.tema);
-    
-    fclose(archivo);
-}
-
-// Ingresar ARTICULO
-void crear_recurso_articulo (void)
-{	
-
-    archivo= fopen(nombrearchivo, "a"); //abro el archivo
+				archivo= fopen(nombrearchivo, "a"); //abro el archivo
 	
-    //Ingresar datos 
-    printf("\ningrese el Titulo: ");
-    fflush(stdin);
-    gets(articulo1.titulo);
-    
-    printf("\nIngrese el Autor(es): ");
-    fflush(stdin);
-    gets(articulo1.autors);
-    
-    printf("\nIngrese Tema: ");
-    fflush(stdin);
-    gets(articulo1.tema);
+			    //Ingresar datos 
+			    printf("\ningrese el Titulo: ");
+			    fflush(stdin);
+			    gets(monografia1.titulo);
+			    
+			    printf("\nIngrese el Autor(es): ");
+			    fflush(stdin);
+			    gets(monografia1.autors);
+			    
+			    printf("\nIngrese Tema: ");
+			    fflush(stdin);
+			    gets(monografia1.tema);
 
-    printf("\nIngrese Nombre de la revista: ");
-    fflush(stdin);
-    gets(articulo1.nombre_revista);
+			    // Escribir datos en el archivo
+			    fprintf(archivo,"monografia|");
+			    fprintf(archivo,"%s|",monografia1.titulo);
+			    fprintf(archivo,"%s|",monografia1.autors);
+			    fprintf(archivo,"%s.\n",monografia1.tema);
+			    
+			    fclose(archivo);
+			    
+			    break;
 
-    printf("Ingrese rango de paginas articulo: ");
-    fflush(stdin);
-    gets(articulo1.paginas);
+		case 3:	/*RECURSO ARTICULO*/
 
-    // Escribir datos en el archivo
-    fprintf(archivo,"monografia|");
-    fprintf(archivo,"%s|",articulo1.titulo);
-    fprintf(archivo,"%s|",articulo1.autors);
-    fprintf(archivo,"%s|",articulo1.tema);
-    fprintf(archivo,"%s|",articulo1.nombre_revista);
-    fprintf(archivo,"%s.\n",articulo1.paginas);
+				archivo= fopen(nombrearchivo, "a"); //abro el archivo
+	
+			    //Ingresar datos 
+			    printf("\ningrese el Titulo: ");
+			    fflush(stdin);
+			    gets(articulo1.titulo);
+			    
+			    printf("\nIngrese el Autor(es): ");
+			    fflush(stdin);
+			    gets(articulo1.autors);
+			    
+			    printf("\nIngrese Tema: ");
+			    fflush(stdin);
+			    gets(articulo1.tema);
+
+			    printf("\nIngrese Nombre de la revista: ");
+			    fflush(stdin);
+			    gets(articulo1.nombre_revista);
+
+			    printf("\nIngrese rango de paginas articulo: ");
+			    fflush(stdin);
+			    gets(articulo1.paginas);
+
+			    // Escribir datos en el archivo
+			    fprintf(archivo,"monografia|");
+			    fprintf(archivo,"%s|",articulo1.titulo);
+			    fprintf(archivo,"%s|",articulo1.autors);
+			    fprintf(archivo,"%s|",articulo1.tema);
+			    fprintf(archivo,"%s|",articulo1.nombre_revista);
+			    fprintf(archivo,"%s.\n",articulo1.paginas);
+			    
+			    fclose(archivo);
+			    
+			    break;
+
+		case 4:	/*RECURSO AUDIO*/
+
+				archivo= fopen(nombrearchivo, "a"); //abro el archivo
+	
+			    //Ingresar datos 
+			    printf("\ningrese el Titulo: ");
+			    fflush(stdin);
+			    gets(audio1.titulo);
+			    
+			    printf("\nIngrese el Autor(es): ");
+			    fflush(stdin);
+			    gets(audio1.autors);
+			    
+			    printf("\nIngrese Tema: ");
+			    fflush(stdin);
+			    gets(audio1.tema);
+
+			    printf("\nIngrese Nombre de la revista: ");
+			    fflush(stdin);
+			    gets(audio1.formato);
+
+			    printf("Ingrese rango de paginas articulo: ");
+			    fflush(stdin);
+			    gets(audio1.duracion);
+
+			    // Escribir datos en el archivo
+			    fprintf(archivo,"monografia|");
+			    fprintf(archivo,"%s|",audio1.titulo);
+			    fprintf(archivo,"%s|",audio1.autors);
+			    fprintf(archivo,"%s|",audio1.tema);
+			    fprintf(archivo,"%s|",audio1.formato);
+			    fprintf(archivo,"%s.\n",audio1.duracion);
+			    
+			    fclose(archivo);
+			    
+			    break;
+
+		case 5:	/*RECURSO VIDEO*/
+
+				archivo= fopen(nombrearchivo, "a"); //abro el archivo
+	
+			    //Ingresar datos 
+			    printf("\ningrese el Titulo: ");
+			    fflush(stdin);
+			    gets(video1.titulo);
+			    
+			    printf("\nIngrese el Autor(es): ");
+			    fflush(stdin);
+			    gets(video1.autors);
+			    
+			    printf("\nIngrese Tema: ");
+			    fflush(stdin);
+			    gets(video1.tema);
+
+			    printf("\nIngrese Nombre de la revista: ");
+			    fflush(stdin);
+			    gets(video1.formato);
+
+			    printf("Ingrese rango de paginas articulo: ");
+			    fflush(stdin);
+			    gets(video1.duracion);
+
+			    // Escribir datos en el archivo
+			    fprintf(archivo,"monografia|");
+			    fprintf(archivo,"%s|",video1.titulo);
+			    fprintf(archivo,"%s|",video1.autors);
+			    fprintf(archivo,"%s|",video1.tema);
+			    fprintf(archivo,"%s|",video1.formato);
+			    fprintf(archivo,"%s.\n",video1.duracion);
+			    
+			    fclose(archivo);
+			    
+			    break;
+
+		case 6:	/*RECURSO URI*/
+			    
+				archivo= fopen(nombrearchivo, "a"); //abro el archivo
+	
+			    //Ingresar datos 
+			    printf("\ningrese el Titulo: ");
+			    fflush(stdin);
+			    gets(uri1.titulo);
+			    
+			    printf("\nIngrese el Autor(es): ");
+			    fflush(stdin);
+			    gets(uri1.autors);
+			    
+			    printf("\nIngrese Tema: ");
+			    fflush(stdin);
+			    gets(uri1.tema);
+
+			    printf("\nIngrese Nombre de la revista: ");
+			    fflush(stdin);
+			    gets(uri1.uri);
+
+			    printf("Ingrese rango de paginas articulo: ");
+			    fflush(stdin);
+			    gets(uri1.idioma);
+
+			    // Escribir datos en el archivo
+			    fprintf(archivo,"monografia|");
+			    fprintf(archivo,"%s|",uri1.titulo);
+			    fprintf(archivo,"%s|",uri1.autors);
+			    fprintf(archivo,"%s|",uri1.tema);
+			    fprintf(archivo,"%s|",uri1.uri);
+			    fprintf(archivo,"%s.\n",uri1.idioma);
+			    
+			    fclose(archivo);
+			    
+			    break;
+		
+	}
+	
     
-    fclose(archivo);
 }
 
 
@@ -315,17 +438,20 @@ int main (void)
 			        			switch(opc_admin_agrear)
 								{
 									case 1:
-											crear_recurso_libro ();
+											crear_recurso(opc_admin_agrear);
+											//crear_recurso_libro ();
 											getch();
 											break;
 
 									case 2:
-											crear_recurso_monografia ();
+											crear_recurso(opc_admin_agrear);
+											//crear_recurso_monografia ();
 											getch();
 											break;
 
 									case 3:
-											crear_recurso_articulo ();
+											crear_recurso(opc_admin_agrear);
+											//crear_recurso_articulo ();
 											getch();
 											break;
 
