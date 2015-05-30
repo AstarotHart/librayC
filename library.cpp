@@ -139,8 +139,16 @@ void menu_config_metadatos (void)
 void crear_recurso_libro (void)
 {	
 	libro libro1;
+	
+	FILE* archivo= NULL;
+    char* nombrearchivo = "Library.txt";
 
     //recibo los valores por entrada del usuario
+    /*Ojo: "w" me sobreescribe un archivo si ya existe*/
+    archivo= fopen(nombrearchivo, "a"); //abro el archivo
+    //if (archivo == NULL)return-1;//si no pudo abrir lo cierro
+	
+    //Ingresar datos
     printf("Ingrese ISBN: ");
     fflush(stdin);
     scanf("%d",&libro1.ISBN);
@@ -163,6 +171,17 @@ void crear_recurso_libro (void)
     
     //imprimo los valores
     printf("ISBN: %d\nTITULO: %s \nAUTOR: %s \nTEMA: %s \nA. PUBLIC: %d",libro1.ISBN, libro1.titulo, libro1.autors, libro1.tema, libro1.anio_publicacion);
+    //printf("ISBN: %d\nTITULO: %s \nAUTOR: %s \nTEMA: %s \nA. PUBLIC: %d",libro1.ISBN, libro1.titulo, libro1.autors, libro1.tema, libro1.anio_publicacion);
+    
+    // Escribir datos en el archivo
+    fprintf(archivo,"libro|");
+    fprintf(archivo,"%d|",libro1.ISBN);
+    fprintf(archivo,"%s|",libro1.titulo);
+    fprintf(archivo,"%s|",libro1.autors);
+    fprintf(archivo,"%s|",libro1.tema);
+    fprintf(archivo,"%d.\n",libro1.anio_publicacion);
+    
+    fclose(archivo);
 }
 
 
