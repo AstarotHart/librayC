@@ -4,15 +4,74 @@
 #include <ctype.h>
 
 
-/* Variables Globales*/
+/* ESTRUCTURAS */
 
+// Estructura LIBRO
+typedef struct libro
+{
+	int		ISBN;
+	char 	titulo[120];
+	char 	autors[60];
+	char 	tema[120];
+	int		anio_publicacion;
+}
 
+// Estructura MONOGRAFIA
+typedef struct monografia
+{
+	char 	titulo[120];
+	char 	autors[60];
+	char 	tema[120];
+}
 
-/* Prototipos*/
+// Estructura ARTICULO
+typedef struct articulo
+{
+	char 	titulo[120];
+	char 	autors[60];
+	char 	tema[120];
+	char	nombre_revista[120];
+	char	paginas[120];
+}
+
+// Estructura AUDIO
+typedef struct audio
+{
+	char 	titulo[120];
+	char 	autors[60];
+	char 	tema[120];
+	char	formato[20];
+	char	duracion[60];
+}
+
+// Estructura VIDEO
+typedef struct video
+{
+	char 	titulo[120];
+	char 	autors[60];
+	char 	tema[120];
+	char	formato[20];
+	char	duracion[60];
+}
+
+// Estructura RECURSO WEB
+typedef struct uri
+{
+	char 	titulo[120];
+	char 	autors[60];
+	char 	tema[120];
+	char	uri[300];
+	char	idioma[120];
+}
+
+/* PROTOTIPOS */
 
 
 
 /* FUNCIONES */
+
+
+/* -------------------------- MENUS -------------------------- */
 
 // Menu Principal
 void opciones (void)
@@ -58,9 +117,9 @@ void menu_config (void)
 void menu_config_tipos (void)
 {
      printf ("	    CONFIGURACION RECURSOS 		\n\n\n");
-     printf (" 1.  Crear recurso.				\n");
-     printf (" 2.  Modificar recurso.			\n");
-     printf (" 3.  Borrar recurso.				\n");
+     printf (" 1.  Crear recurso.					\n");
+     printf (" 2.  Modificar recurso.				\n");
+     printf (" 3.  Borrar recurso.					\n");
      printf (" 0.  Volver   \n\n");
 }
 
@@ -68,12 +127,14 @@ void menu_config_tipos (void)
 void menu_config_metadatos (void)
 {
      printf ("	    CONFIGURACION METADATOS 	\n\n\n");
-     printf (" 1.  Crear metadatos.				\n");
-     printf (" 2.  Modificar metadatos.			\n");
-     printf (" 3.  Borrar metadatos.			\n");
+     printf (" 1.  Crear metadatos.					\n");
+     printf (" 2.  Modificar metadatos.				\n");
+     printf (" 3.  Borrar metadatos.				\n");
      printf (" 0.  Volver   \n\n");
 }
 
+
+/* ----------------------- FUNCIONES ----------------------- */
 
 
 
@@ -126,7 +187,8 @@ int main (void)
 					break;
 					
 			case 3:
-				
+					
+					menu_config:
 					system ("cls"); 
         
         			menu_config();
@@ -143,6 +205,13 @@ int main (void)
 								
 								printf ("Ingrese la opción seleccionada:  "); 
         						scanf ("%d",&opc_config_tipos);
+        						
+        						switch(opc_config_tipos)
+								{
+									case 0: 
+											goto menu_config;
+								}
+        						
 								break;
 								
 						case 2:
@@ -152,6 +221,13 @@ int main (void)
 								
 								printf ("Ingrese la opción seleccionada:  "); 
         						scanf ("%d",&opc_config_metadatos);
+        						
+        						switch(opc_config_metadatos)
+								{
+									case 0: 
+											goto menu_config;
+								}
+        						
 								break;
 								
 					}
