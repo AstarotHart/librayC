@@ -134,7 +134,36 @@ void menu_config_metadatos (void)
 }
 
 
-/* ----------------------- FUNCIONES ----------------------- */
+/* ----------------------- FUNCIONES RECURSOS ----------------------- */
+
+void crear_recurso_libro (void)
+{	
+	libro libro1;
+
+    //recibo los valores por entrada del usuario
+    printf("Ingrese ISBN: ");
+    fflush(stdin);
+    scanf("%d",&libro1.ISBN);
+    
+    printf("\ningrese el Titulo: ");
+    fflush(stdin);
+    gets(libro1.titulo);
+    
+    printf("\nIngrese el Autor(es): ");
+    fflush(stdin);
+    gets(libro1.autors);
+    
+    printf("\nIngrese Tema: ");
+    fflush(stdin);
+    gets(libro1.tema);
+    
+    printf("\nIngrese el Anio de Pulicacion: ");
+    fflush(stdin);
+    scanf("%d",&libro1.anio_publicacion);
+    
+    //imprimo los valores
+    printf("ISBN: %d\nTITULO: %s \nAUTOR: %s \nTEMA: %s \nA. PUBLIC: %d",libro1.ISBN, libro1.titulo, libro1.autors, libro1.tema, libro1.anio_publicacion);
+}
 
 
 
