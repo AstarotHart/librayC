@@ -81,7 +81,9 @@ uri uri1;
 
 // para ingresar
 FILE* archivo= NULL;
-char* nombrearchivo = "Library.txt";
+//char* nombrearchivo = "Library.txt";
+
+char nombrearchivo[]={"library.dat"};
 
 // para buscar
 FILE* archivo_buscar= NULL;
@@ -204,7 +206,7 @@ void crear_recurso (int opcion)
 		case 1:	/*RECURSO LIBRO*/
 
 				//se abre el archivo
-				archivo= fopen(nombrearchivo, "a"); //abro el archivo
+				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
 	
 			    //Ingresar datos
 			    printf("Ingrese ISBN: ");
@@ -442,19 +444,65 @@ void buscar (int opcion)
 			// para buscar
 			FILE* archivo_buscar= NULL;
 			char* nombrearchivo_buscar = "Library.txt";
+			
+			// METODO TUTORIAL
+			void search()
+			{
+				FILE *fp;
+				struct emp t;
+				int found=0;
+				char name[20];
+				
+				fp=fopen(fname,"rb");
+				
+				printf("\nEnter the Employee Name:");
+				scanf("%s",&name);
+				
+				while(1)
+				{
+					fread(&t,sizeof(t),1,fp);
+					
+					if(feof(fp))
+					{
+						break;
+					}
+					if(strcmp(name,t.name)==0)
+					{
+						printf("\n========================================================\n\n");
+						printf("\t\t Employee Details of %d\n\n",t.id);
+						printf("========================================================\n\n");
+						
+						printf("Name\tSalary\n\n");
+						
+						printf("%s\t",t.name);
+						printf("%d\t\n\n",t.salary);
+						
+						printf("========================================================\n\n");
+					
+					}
+				}
+				if(found==0)
+				{
+					printf("\nSorry No Record Found");
+				}
+				fclose(fp);
+			}
+			
+			
 		*/
 		
 		case 1:	/*BUSCAR POR AUTOR*/
 
+				int found=0;
 				//se abre el archivo
-				archivo_buscar= fopen(nombrearchivo, "a+");
+				archivo_buscar= fopen(nombrearchivo, "rb");
 				
 				//Ingresar termino a buscar
 				printf("\nAutor a Buscar: ");
 			    fflush(stdin);
 			    gets(busq);
     			
-    		
+    			/*
 			    while(!feof(archivo_buscar))
 				{
 			        fread(&libro1,sizeof(libro1),1,archivo_buscar);
@@ -473,6 +521,63 @@ void buscar (int opcion)
 		        }
 		        
 		        fclose(archivo);
+		        */
+		        
+		        
+		        while(1)
+				{
+					/*
+						fread[editar]
+						size_t fread ( void * ptr, size_t size, size_t count, FILE * stream );
+						
+						Esta función lee un bloque de una "stream" de datos. Efectúa la lectura de un arreglo 
+						de elementos "count", cada uno de los cuales tiene un tamaño definido por "size". 
+						Luego los guarda en el bloque de memoria especificado por "ptr". El indicador de posición 
+						de la cadena de caracteres avanza hasta leer la totalidad de bytes. Si esto es exitoso la 
+						cantidad de bytes leídos es (size*count).
+						
+						
+						PARAMETROS:
+						
+						ptr  : Puntero a un bloque de memoria con un tamaño mínimo de (size*count) bytes.
+						size  : Tamaño en bytes de cada elemento (de los que voy a leer).
+						count : Número de elementos, los cuales tienen un tamaño "size".
+						stream: Puntero a objetos FILE, que especifica la cadena de entrada.
+					*/
+					
+					
+					fread(&libro1,sizeof(libro1),1,archivo_buscar);
+					
+					// Fin archivo int feof(FILE *fichero);
+					if(feof(archivo_buscar))
+					{
+						break;
+					}
+					
+					// strcmp compara cadenas
+					if(strcmp(busq,libro1.autors)==0)
+					{
+						printf("\n========================================================\n\n");
+						printf("\t\t Arcchivos autor: %s\n\n",libro1.autors);
+						printf("========================================================\n\n");
+						
+						printf("ISB\tTITULO\tTEMA\tPUBLICACION\n\n");
+						
+						printf("%d\t",libro1.ISBN);
+						printf("%s\t",libro1.titulo);
+						printf("%s\t",libro1.tema);
+						printf("%d\t\n\n",libro1.anio_publicacion);
+						
+						printf("========================================================\n\n");
+					
+					}
+				}
+				if(found==0)
+				{
+					printf("\nNo hay mas regstros..");
+				}
+				fclose(archivo_buscar);
+		        
 		        
 		break;
 
