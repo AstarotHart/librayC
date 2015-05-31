@@ -4,21 +4,23 @@
 #include <ctype.h>
 
 
-/* ----------------------- ESTRUCTURAS ----------------------- */
+/* ============================== ESTRUCTURAS =============================== */
 
 // Estructura LIBRO
 typedef struct libro
 {
-	int		ISBN;
+	char 	tipo[100];
+	char	ISBN[60];
 	char 	titulo[120];
 	char 	autors[60];
 	char 	tema[120];
-	int		anio_publicacion;
+	char	anio_publicacion[60];
 };
 
 // Estructura MONOGRAFIA
 typedef struct monografia
 {
+	char 	tipo[100];
 	char 	titulo[120];
 	char 	autors[60];
 	char 	tema[120];
@@ -27,6 +29,7 @@ typedef struct monografia
 // Estructura ARTICULO
 typedef struct articulo
 {
+	char 	tipo[100];
 	char 	titulo[120];
 	char 	autors[60];
 	char 	tema[120];
@@ -37,6 +40,7 @@ typedef struct articulo
 // Estructura AUDIO
 typedef struct audio
 {
+	char 	tipo[100];
 	char 	titulo[120];
 	char 	autors[60];
 	char 	tema[120];
@@ -47,6 +51,7 @@ typedef struct audio
 // Estructura VIDEO
 typedef struct video
 {
+	char 	tipo[100];
 	char 	titulo[120];
 	char 	autors[60];
 	char 	tema[120];
@@ -57,15 +62,13 @@ typedef struct video
 // Estructura RECURSO WEB
 typedef struct uri
 {
+	char tipo[100];
 	char 	titulo[120];
 	char 	autors[60];
 	char 	tema[120];
-	char	uri[300];
+	char	uri[800];
 	char	idioma[120];
 };
-
-/* PROTOTIPOS */
-
 
 /* VARIABLES GLOBALES */
 libro libro1;
@@ -75,10 +78,42 @@ audio audio1;
 video video1;
 uri uri1;
 
+// para ingresar
 FILE* archivo= NULL;
 char* nombrearchivo = "Library.txt";
 
-/* ========================= FUNCIONES ======================= */
+// para buscar
+FILE* archivo_buscar= NULL;
+char* nombrearchivo_buscar = "Library.txt";
+
+
+/* ============================== PROTOTIPOS ================================ */
+// Menu Opciones
+void opciones (void);
+
+// Menu Busqueda
+void menu_busqueda (void);
+
+// Menu Administrar Recursos
+void menu_admon_recursos(void);
+
+// Menu Administrar Recursos Agregar
+void menu_admon_recursos_agregar(void);
+
+// Menu Configuracion Biblioteca
+void menu_config (void);
+
+// Menu Configuracion Biblioteca - Administrar tipos
+void menu_config_tipos (void);
+
+// Menu Configuracion Biblioteca - Administrar Metadatos
+void menu_config_metadatos (void);
+
+//Crear RECURSO 
+void crear_recurso (int opcion);
+
+
+/* =============================== FUNCIONES ================================ */
 
 
 /* -------------------------- MENUS -------------------------- */
@@ -121,6 +156,9 @@ void menu_admon_recursos_agregar(void)
      printf (" 1.  Ingresar Libro.					\n");
      printf (" 2.  Ingresar Monografia.				\n");
      printf (" 3.  Ingresar Articulo.				\n");
+     printf (" 4.  Ingresar Audio.					\n");
+     printf (" 5.  Ingresar Video.					\n");
+     printf (" 6.  Ingresar URI.					\n");
      printf (" 0.  Volver   					  \n\n");
 }
 
@@ -156,6 +194,7 @@ void menu_config_metadatos (void)
 
 /* ----------------------- FUNCIONES RECURSOS ----------------------- */
 
+//Funcion con la cual se ingresarn los recuros, cualquiera de ellos.
 void crear_recurso (int opcion)
 {	
 	
@@ -186,12 +225,10 @@ void crear_recurso (int opcion)
 			    printf("\nIngrese el Anio de Pulicacion: ");
 			    fflush(stdin);
 			    scanf("%d",&libro1.anio_publicacion);
-			    
-			    //imprimo los valores
-			    //printf("ISBN: %d\nTITULO: %s \nAUTOR: %s \nTEMA: %s \nA. PUBLIC: %d",libro1.ISBN, libro1.titulo, libro1.autors, libro1.tema, libro1.anio_publicacion);
+
 			    
 			    // Escribir datos en el archivo
-			    fprintf(archivo,"libro|");
+			    fprintf(archivo,"libro|",libro1.tipo);
 			    fprintf(archivo,"%d|",libro1.ISBN);
 			    fprintf(archivo,"%s|",libro1.titulo);
 			    fprintf(archivo,"%s|",libro1.autors);
@@ -220,7 +257,7 @@ void crear_recurso (int opcion)
 			    gets(monografia1.tema);
 
 			    // Escribir datos en el archivo
-			    fprintf(archivo,"monografia|");
+			    fprintf(archivo,"monografia|",monografia1.tipo);
 			    fprintf(archivo,"%s|",monografia1.titulo);
 			    fprintf(archivo,"%s|",monografia1.autors);
 			    fprintf(archivo,"%s.\n",monografia1.tema);
@@ -255,7 +292,7 @@ void crear_recurso (int opcion)
 			    gets(articulo1.paginas);
 
 			    // Escribir datos en el archivo
-			    fprintf(archivo,"monografia|");
+			    fprintf(archivo,"articulo|",articulo1.tipo);
 			    fprintf(archivo,"%s|",articulo1.titulo);
 			    fprintf(archivo,"%s|",articulo1.autors);
 			    fprintf(archivo,"%s|",articulo1.tema);
@@ -283,16 +320,16 @@ void crear_recurso (int opcion)
 			    fflush(stdin);
 			    gets(audio1.tema);
 
-			    printf("\nIngrese Nombre de la revista: ");
+			    printf("\nIngrese formato de del audio: ");
 			    fflush(stdin);
 			    gets(audio1.formato);
 
-			    printf("Ingrese rango de paginas articulo: ");
+			    printf("Ingrese duracion del audio (hh:mm:ss): ");
 			    fflush(stdin);
 			    gets(audio1.duracion);
 
 			    // Escribir datos en el archivo
-			    fprintf(archivo,"monografia|");
+			    fprintf(archivo,"audio|",audio1.tipo);
 			    fprintf(archivo,"%s|",audio1.titulo);
 			    fprintf(archivo,"%s|",audio1.autors);
 			    fprintf(archivo,"%s|",audio1.tema);
@@ -320,16 +357,16 @@ void crear_recurso (int opcion)
 			    fflush(stdin);
 			    gets(video1.tema);
 
-			    printf("\nIngrese Nombre de la revista: ");
+			    printf("\nIngrese formato de video: ");
 			    fflush(stdin);
 			    gets(video1.formato);
 
-			    printf("Ingrese rango de paginas articulo: ");
+			    printf("Ingrese duracion del video (hh:mm:ss): ");
 			    fflush(stdin);
 			    gets(video1.duracion);
 
 			    // Escribir datos en el archivo
-			    fprintf(archivo,"monografia|");
+			    fprintf(archivo,"video|",video1.tipo);
 			    fprintf(archivo,"%s|",video1.titulo);
 			    fprintf(archivo,"%s|",video1.autors);
 			    fprintf(archivo,"%s|",video1.tema);
@@ -357,16 +394,16 @@ void crear_recurso (int opcion)
 			    fflush(stdin);
 			    gets(uri1.tema);
 
-			    printf("\nIngrese Nombre de la revista: ");
+			    printf("\nIngrese URI: ");
 			    fflush(stdin);
 			    gets(uri1.uri);
 
-			    printf("Ingrese rango de paginas articulo: ");
+			    printf("Ingrese idioma del recurso: ");
 			    fflush(stdin);
 			    gets(uri1.idioma);
 
 			    // Escribir datos en el archivo
-			    fprintf(archivo,"monografia|");
+			    fprintf(archivo,"uri|",uri1.tipo);
 			    fprintf(archivo,"%s|",uri1.titulo);
 			    fprintf(archivo,"%s|",uri1.autors);
 			    fprintf(archivo,"%s|",uri1.tema);
@@ -376,10 +413,13 @@ void crear_recurso (int opcion)
 			    fclose(archivo);
 			    
 			    break;
-		
-	}
+	}   
+}
+
+// Funcion para buscar en el archivo
+void buscar (void)
+{
 	
-    
 }
 
 
@@ -408,10 +448,57 @@ int main (void)
         			scanf ("%d",&opc_busq);
 				
 					//Menu Busqueda
-					/*switch(opc_busq) 
+					switch(opc_busqueda) 
 					{
-						
-					}*/
+							/*
+								1.  Buscar por Autor.				\n");
+ 								2.  Buscar por Titulo.				\n");
+								3.  Buscar por tema.
+							*/
+							
+							case 1:	// Crear recurso LIBRO
+									crear_recurso(opc_admin_agrear);
+									getch();
+									goto menu_admin_agregar;
+									break;
+
+							case 2:	// Crear recurso MONOGRAFIA
+									crear_recurso(opc_admin_agrear);
+									getch();
+									goto menu_admin_agregar;
+									break;
+
+							case 3:	// Crear recurso ARTICULO
+									crear_recurso(opc_admin_agrear);
+									getch();
+									goto menu_admin_agregar;
+									break;
+
+							case 4:	// Crear recurso AUDIO
+									crear_recurso(opc_admin_agrear);
+									getch();
+									goto menu_admin_agregar;
+									break;
+											
+							case 5:	// Crear recurso VIDEO
+									crear_recurso(opc_admin_agrear);
+									getch();
+									goto menu_admin_agregar;
+									break;
+											
+							case 6:	// Crear recurso URI
+									crear_recurso(opc_admin_agrear);
+									getch();
+									goto menu_admin_agregar;
+									break;
+												
+							case 0: 
+									goto menu_admin;
+									break;
+								
+					}
+
+					break;
 					
 					break;
 		
@@ -437,31 +524,44 @@ int main (void)
 
 			        			switch(opc_admin_agrear)
 								{
-									case 1:
+									case 1:	// Crear recurso LIBRO
 											crear_recurso(opc_admin_agrear);
-											//crear_recurso_libro ();
 											getch();
+											goto menu_admin_agregar;
 											break;
 
-									case 2:
+									case 2:	// Crear recurso MONOGRAFIA
 											crear_recurso(opc_admin_agrear);
-											//crear_recurso_monografia ();
 											getch();
+											goto menu_admin_agregar;
 											break;
 
-									case 3:
+									case 3:	// Crear recurso ARTICULO
 											crear_recurso(opc_admin_agrear);
-											//crear_recurso_articulo ();
 											getch();
+											goto menu_admin_agregar;
 											break;
 
-									/*case 4:
-											crear_recurso_libro ();
+									case 4:	// Crear recurso AUDIO
+											crear_recurso(opc_admin_agrear);
 											getch();
-											break;*/
+											goto menu_admin_agregar;
+											break;
+											
+									case 5:	// Crear recurso VIDEO
+											crear_recurso(opc_admin_agrear);
+											getch();
+											goto menu_admin_agregar;
+											break;
+											
+									case 6:	// Crear recurso URI
+											crear_recurso(opc_admin_agrear);
+											getch();
+											goto menu_admin_agregar;
+											break;
 												
 									case 0: 
-											goto menu_admin_agregar;
+											goto menu_admin;
 											break;
 								}
 			        						
