@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <ctype.h>
+#include <string.h>
 
 
 /* ============================== ESTRUCTURAS =============================== */
@@ -228,13 +229,17 @@ void crear_recurso (int opcion)
 
 			    
 			    // Escribir datos en el archivo
-			    fprintf(archivo,"libro|",libro1.tipo);
+			/*	fprintf(archivo,"libro|",libro1.tipo);
 			    fprintf(archivo,"%d|",libro1.ISBN);
 			    fprintf(archivo,"%s|",libro1.titulo);
 			    fprintf(archivo,"%s|",libro1.autors);
 			    fprintf(archivo,"%s|",libro1.tema);
 			    fprintf(archivo,"%d.\n",libro1.anio_publicacion);
-			    
+			*/  
+			
+				/*OTRA FORMA*/
+				fwrite(&libro1,sizeof(libro1),1,archivo);
+				
 			    fclose(archivo);
 			    
 			    break;
@@ -257,11 +262,15 @@ void crear_recurso (int opcion)
 			    gets(monografia1.tema);
 
 			    // Escribir datos en el archivo
-			    fprintf(archivo,"monografia|",monografia1.tipo);
+			/*	fprintf(archivo,"monografia|",monografia1.tipo);
 			    fprintf(archivo,"%s|",monografia1.titulo);
 			    fprintf(archivo,"%s|",monografia1.autors);
 			    fprintf(archivo,"%s.\n",monografia1.tema);
-			    
+			*/
+			
+				/*OTRA FORMA*/
+				fwrite(&monografia1,sizeof(monografia1),1,archivo);
+				
 			    fclose(archivo);
 			    
 			    break;
@@ -417,9 +426,58 @@ void crear_recurso (int opcion)
 }
 
 // Funcion para buscar en el archivo
-void buscar (void)
+void buscar (int opcion)
 {
+	char busq[60];
 	
+	switch(opcion)
+	{
+		/*
+			1.  Buscar por Autor.				\n");
+ 			2.  Buscar por Titulo.				\n");
+			3.  Buscar por tema.
+		
+		
+		/*
+			// para buscar
+			FILE* archivo_buscar= NULL;
+			char* nombrearchivo_buscar = "Library.txt";
+		*/
+		
+		case 1:	/*BUSCAR POR AUTOR*/
+
+				//se abre el archivo
+				archivo_buscar= fopen(nombrearchivo, "a+");
+				
+				//Ingresar termino a buscar
+				printf("\nAutor a Buscar: ");
+			    fflush(stdin);
+			    gets(busq);
+    			
+    		
+			    while(!feof(archivo_buscar))
+				{
+			        fread(&libro1,sizeof(libro1),1,archivo_buscar);
+			
+					//Con la funcion strstr de la libreria string.h, me compara dos cadenas y me dice si son iguales, si son iguales entonces existe
+			        if(strstr(busq,libro1.autors)!=NULL)
+					{
+			        	printf("\nISBN: %s\nTITULO: %s \nAUTOR: %s \nTEMA: %s \nA. PUBLIC: %s",libro1.ISBN, libro1.titulo, libro1.autors, libro1.tema, libro1.anio_publicacion);
+			        }
+			        
+			        else
+					{
+            			printf("\n\nNo existe");
+            			break;
+        			}
+		        }
+		        
+		        fclose(archivo);
+		        
+		break;
+
+  }
+
 }
 
 
@@ -428,7 +486,7 @@ void buscar (void)
 /* MAIN */
 int main (void)
 {
-	int opc=-1, opc_busq=-1, opc_admin=-1, opc_config=-1, opc_config_tipos=-1, opc_config_metadatos=-1, opc_admin_agrear=-1;
+	int opc=-1, opc_busqueda=-1, opc_admin=-1, opc_config=-1, opc_config_tipos=-1, opc_config_metadatos=-1, opc_admin_agrear=-1;
 	
 	do {
         system ("cls"); 
@@ -441,11 +499,12 @@ int main (void)
 		{
 			case 1:
 				
+					menu_busqueda:
 					system ("cls"); 
         
         			menu_busqueda(); 
 					printf ("Ingrese la opción seleccionada:  "); 
-        			scanf ("%d",&opc_busq);
+        			scanf ("%d",&opc_busqueda);
 				
 					//Menu Busqueda
 					switch(opc_busqueda) 
@@ -456,51 +515,30 @@ int main (void)
 								3.  Buscar por tema.
 							*/
 							
-							case 1:	// Crear recurso LIBRO
-									crear_recurso(opc_admin_agrear);
+							case 1:	// buscar por AUTOR
+									buscar(opc_busqueda);
 									getch();
-									goto menu_admin_agregar;
+									goto menu_busqueda;
 									break;
-
-							case 2:	// Crear recurso MONOGRAFIA
-									crear_recurso(opc_admin_agrear);
+									
+							case 2:	// buscar por TITULO
+									buscar(opc_busqueda);
 									getch();
-									goto menu_admin_agregar;
+									goto menu_busqueda;
 									break;
-
-							case 3:	// Crear recurso ARTICULO
-									crear_recurso(opc_admin_agrear);
+									
+							case 3:	// buscar por TEMA
+									buscar(opc_busqueda);
 									getch();
-									goto menu_admin_agregar;
-									break;
-
-							case 4:	// Crear recurso AUDIO
-									crear_recurso(opc_admin_agrear);
-									getch();
-									goto menu_admin_agregar;
-									break;
-											
-							case 5:	// Crear recurso VIDEO
-									crear_recurso(opc_admin_agrear);
-									getch();
-									goto menu_admin_agregar;
-									break;
-											
-							case 6:	// Crear recurso URI
-									crear_recurso(opc_admin_agrear);
-									getch();
-									goto menu_admin_agregar;
+									goto menu_busqueda;
 									break;
 												
 							case 0: 
-									goto menu_admin;
 									break;
 								
 					}
-
-					break;
 					
-					break;
+			break;
 		
 			case 2:
 					
@@ -569,7 +607,7 @@ int main (void)
 						
 					}
 					
-					break;
+			break;
 					
 			case 3:
 					
@@ -618,7 +656,7 @@ int main (void)
 								
 					}
 
-					break;
+			break;
 						
 			defalut:
 			printf("Ha ingresado un numero no valido\n");
