@@ -205,31 +205,31 @@ void crear_recurso (int opcion)
 				//se abre el archivo
 				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
 	
-			    //Ingresar datos
-			    printf("Ingrese ISBN: ");
-			    fflush(stdin);
-			    scanf("%d",&libro1.ISBN);
-			    
-			    printf("\ningrese el Titulo: ");
-			    fflush(stdin);
-			    gets(libro1.titulo);
-			    
-			    printf("\nIngrese el Autor(es): ");
-			    fflush(stdin);
-			    gets(libro1.autors);
-			    
-			    printf("\nIngrese Tema: ");
-			    fflush(stdin);
-			    gets(libro1.tema);
-			    
-			    printf("\nIngrese el Anio de Pulicacion: ");
-			    fflush(stdin);
-			    scanf("%d",&libro1.anio_publicacion);
-			
-				/*OTRA FORMA*/
-				fwrite(&libro1,sizeof(libro1),1,archivo);
+				    //Ingresar datos
+				    printf("Ingrese ISBN: ");
+				    fflush(stdin);
+				    scanf("%d",&libro1.ISBN);
+				    
+				    printf("\ningrese el Titulo: ");
+				    fflush(stdin);
+				    gets(libro1.titulo);
+				    
+				    printf("\nIngrese el Autor(es): ");
+				    fflush(stdin);
+				    gets(libro1.autors);
+				    
+				    printf("\nIngrese Tema: ");
+				    fflush(stdin);
+				    gets(libro1.tema);
+				    
+				    printf("\nIngrese el Anio de Pulicacion: ");
+				    fflush(stdin);
+				    scanf("%d",&libro1.anio_publicacion);
 				
-			    fclose(archivo);
+					/*OTRA FORMA*/
+					fwrite(&libro1,sizeof(libro1),1,archivo);
+					
+				    fclose(archivo);
 			    
 			    break;
 			    
@@ -428,9 +428,6 @@ void buscar (int opcion)
 		        	found = 0;
 		        	cont = 0;
 		        	
-		        	//se abre el archivo
-					//archivo_buscar= fopen(nombrearchivo_buscar, "rb");
-		        	
 			        while(1)
 					{
 						/*
@@ -489,9 +486,7 @@ void buscar (int opcion)
 						printf("\n   ---------------------------------------------\n\n");
 		        		goto autor_monografia;				
 					}
-					
-					//Cierro el archivo
-					//fclose(archivo_buscar);
+
 
 			/*BUSCAR EN MONOGRAFIA POR AUTOR*/
 
@@ -499,9 +494,6 @@ void buscar (int opcion)
 		        	
 		        	found = 0;
 		        	cont = 0;
-		        	
-		        	//se abre el archivo
-					//archivo_buscar= fopen(nombrearchivo_buscar, "rb");
 		        	
 			        while(1)
 					{
@@ -538,9 +530,7 @@ void buscar (int opcion)
 						printf("\n   ---------------------------------------------\n\n");
 		        		goto autor_articulo;				
 					}
-					
-					//Cierro el archivo
-					//fclose(archivo_buscar);
+
 
 			/*BUSCAR EN ARTICULO POR AUTOR*/
 
@@ -548,9 +538,6 @@ void buscar (int opcion)
 		        	
 		        	found = 0;
 		        	cont = 0;
-		        	
-		        	//se abre el archivo
-					//archivo_buscar= fopen(nombrearchivo_buscar, "rb");
 		        	
 			        while(1)
 					{
@@ -589,9 +576,7 @@ void buscar (int opcion)
 						printf("\n   ---------------------------------------\n\n");
 		        		goto autor_audio;				
 					}
-					
-					//Cierro el archivo
-					//fclose(archivo_buscar);
+
 
 			/*BUSCAR EN AUDIO POR AUTOR*/
 
@@ -599,9 +584,6 @@ void buscar (int opcion)
 		        	
 		        	found = 0;
 		        	cont = 0;
-		        	
-		        	//se abre el archivo
-					//archivo_buscar= fopen(nombrearchivo_buscar, "rb");
 		        	
 			        while(1)
 					{
@@ -640,9 +622,6 @@ void buscar (int opcion)
 						printf("\n   ---------------------------------------\n\n");
 		        		goto autor_video;				
 					}
-					
-					//Cierro el archivo
-					//fclose(archivo_buscar);
 
 
 			/*BUSCAR EN VIDEO POR AUTOR*/
