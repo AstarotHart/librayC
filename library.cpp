@@ -10,18 +10,17 @@
 // Estructura LIBRO
 typedef struct libro
 {
-	char 	tipo[100];
-	char	ISBN[60];
+	int		ISBN;
 	char 	titulo[120];
 	char 	autors[60];
 	char 	tema[120];
-	char	anio_publicacion[60];
+	int		anio_publicacion;
 };
 
 // Estructura MONOGRAFIA
 typedef struct monografia
 {
-	char 	tipo[100];
+
 	char 	titulo[120];
 	char 	autors[60];
 	char 	tema[120];
@@ -30,7 +29,7 @@ typedef struct monografia
 // Estructura ARTICULO
 typedef struct articulo
 {
-	char 	tipo[100];
+
 	char 	titulo[120];
 	char 	autors[60];
 	char 	tema[120];
@@ -41,7 +40,6 @@ typedef struct articulo
 // Estructura AUDIO
 typedef struct audio
 {
-	char 	tipo[100];
 	char 	titulo[120];
 	char 	autors[60];
 	char 	tema[120];
@@ -52,7 +50,6 @@ typedef struct audio
 // Estructura VIDEO
 typedef struct video
 {
-	char 	tipo[100];
 	char 	titulo[120];
 	char 	autors[60];
 	char 	tema[120];
@@ -63,7 +60,6 @@ typedef struct video
 // Estructura RECURSO WEB
 typedef struct uri
 {
-	char tipo[100];
 	char 	titulo[120];
 	char 	autors[60];
 	char 	tema[120];
@@ -87,7 +83,8 @@ char nombrearchivo[]={"library.dat"};
 
 // para buscar
 FILE* archivo_buscar= NULL;
-char* nombrearchivo_buscar = "Library.txt";
+//char* nombrearchivo_buscar = "Library.txt";
+char nombrearchivo_buscar[]={"library.dat"};
 
 
 /* ============================== PROTOTIPOS ================================ */
@@ -228,16 +225,6 @@ void crear_recurso (int opcion)
 			    printf("\nIngrese el Anio de Pulicacion: ");
 			    fflush(stdin);
 			    scanf("%d",&libro1.anio_publicacion);
-
-			    
-			    // Escribir datos en el archivo
-			/*	fprintf(archivo,"libro|",libro1.tipo);
-			    fprintf(archivo,"%d|",libro1.ISBN);
-			    fprintf(archivo,"%s|",libro1.titulo);
-			    fprintf(archivo,"%s|",libro1.autors);
-			    fprintf(archivo,"%s|",libro1.tema);
-			    fprintf(archivo,"%d.\n",libro1.anio_publicacion);
-			*/  
 			
 				/*OTRA FORMA*/
 				fwrite(&libro1,sizeof(libro1),1,archivo);
@@ -264,13 +251,6 @@ void crear_recurso (int opcion)
 			    gets(monografia1.tema);
 
 			    // Escribir datos en el archivo
-			/*	fprintf(archivo,"monografia|",monografia1.tipo);
-			    fprintf(archivo,"%s|",monografia1.titulo);
-			    fprintf(archivo,"%s|",monografia1.autors);
-			    fprintf(archivo,"%s.\n",monografia1.tema);
-			*/
-			
-				/*OTRA FORMA*/
 				fwrite(&monografia1,sizeof(monografia1),1,archivo);
 				
 			    fclose(archivo);
@@ -302,14 +282,9 @@ void crear_recurso (int opcion)
 			    fflush(stdin);
 			    gets(articulo1.paginas);
 
-			    // Escribir datos en el archivo
-			    fprintf(archivo,"articulo|",articulo1.tipo);
-			    fprintf(archivo,"%s|",articulo1.titulo);
-			    fprintf(archivo,"%s|",articulo1.autors);
-			    fprintf(archivo,"%s|",articulo1.tema);
-			    fprintf(archivo,"%s|",articulo1.nombre_revista);
-			    fprintf(archivo,"%s.\n",articulo1.paginas);
-			    
+			     // Escribir datos en el archivo
+				fwrite(&articulo1,sizeof(articulo1),1,archivo);
+
 			    fclose(archivo);
 			    
 			    break;
@@ -339,13 +314,8 @@ void crear_recurso (int opcion)
 			    fflush(stdin);
 			    gets(audio1.duracion);
 
-			    // Escribir datos en el archivo
-			    fprintf(archivo,"audio|",audio1.tipo);
-			    fprintf(archivo,"%s|",audio1.titulo);
-			    fprintf(archivo,"%s|",audio1.autors);
-			    fprintf(archivo,"%s|",audio1.tema);
-			    fprintf(archivo,"%s|",audio1.formato);
-			    fprintf(archivo,"%s.\n",audio1.duracion);
+			     // Escribir datos en el archivo
+				fwrite(&audio1,sizeof(audio1),1,archivo);
 			    
 			    fclose(archivo);
 			    
@@ -376,13 +346,8 @@ void crear_recurso (int opcion)
 			    fflush(stdin);
 			    gets(video1.duracion);
 
-			    // Escribir datos en el archivo
-			    fprintf(archivo,"video|",video1.tipo);
-			    fprintf(archivo,"%s|",video1.titulo);
-			    fprintf(archivo,"%s|",video1.autors);
-			    fprintf(archivo,"%s|",video1.tema);
-			    fprintf(archivo,"%s|",video1.formato);
-			    fprintf(archivo,"%s.\n",video1.duracion);
+			     // Escribir datos en el archivo
+				fwrite(&video1,sizeof(video1),1,archivo);
 			    
 			    fclose(archivo);
 			    
@@ -413,13 +378,8 @@ void crear_recurso (int opcion)
 			    fflush(stdin);
 			    gets(uri1.idioma);
 
-			    // Escribir datos en el archivo
-			    fprintf(archivo,"uri|",uri1.tipo);
-			    fprintf(archivo,"%s|",uri1.titulo);
-			    fprintf(archivo,"%s|",uri1.autors);
-			    fprintf(archivo,"%s|",uri1.tema);
-			    fprintf(archivo,"%s|",uri1.uri);
-			    fprintf(archivo,"%s.\n",uri1.idioma);
+			     // Escribir datos en el archivo
+				fwrite(&uri1,sizeof(uri1),1,archivo);
 			    
 			    fclose(archivo);
 			    
@@ -432,119 +392,344 @@ void buscar (int opcion)
 {
 	char busq[60];
 	
+	int found=0, cont=0;
+	
 	switch(opcion)
 	{
 		/*
 			1.  Buscar por Autor.				\n");
  			2.  Buscar por Titulo.				\n");
 			3.  Buscar por tema.
-		
-		
-		/*
-			// para buscar
-			FILE* archivo_buscar= NULL;
-			char* nombrearchivo_buscar = "Library.txt";
-			
-			// METODO TUTORIAL
-			void search()
-			{
-				FILE *fp;
-				struct emp t;
-				int found=0;
-				char name[20];
-				
-				fp=fopen(fname,"rb");
-				
-				printf("\nEnter the Employee Name:");
-				scanf("%s",&name);
-				
-				while(1)
-				{
-					fread(&t,sizeof(t),1,fp);
-					
-					if(feof(fp))
-					{
-						break;
-					}
-					if(strcmp(name,t.name)==0)
-					{
-						printf("\n========================================================\n\n");
-						printf("\t\t Employee Details of %d\n\n",t.id);
-						printf("========================================================\n\n");
-						
-						printf("Name\tSalary\n\n");
-						
-						printf("%s\t",t.name);
-						printf("%d\t\n\n",t.salary);
-						
-						printf("========================================================\n\n");
-					
-					}
-				}
-				if(found==0)
-				{
-					printf("\nSorry No Record Found");
-				}
-				fclose(fp);
-			}
-			
-			
 		*/
 		
 		case 1:	/*BUSCAR POR AUTOR*/
 
-				int found=0;
 				//se abre el archivo
 				archivo_buscar= fopen(nombrearchivo, "rb");
 				
 				//Ingresar termino a buscar
-				printf("\nAutor a Buscar: ");
+				printf("\n  Autor a Buscar: ");
 			    fflush(stdin);
 			    gets(busq);
-    			
-    			/*
-			    while(!feof(archivo_buscar))
-				{
-			        fread(&libro1,sizeof(libro1),1,archivo_buscar);
-			
-					//Con la funcion strstr de la libreria string.h, me compara dos cadenas y me dice si son iguales, si son iguales entonces existe
-			        if(strstr(busq,libro1.autors)!=NULL)
-					{
-			        	printf("\nISBN: %s\nTITULO: %s \nAUTOR: %s \nTEMA: %s \nA. PUBLIC: %s",libro1.ISBN, libro1.titulo, libro1.autors, libro1.tema, libro1.anio_publicacion);
-			        }
-			        
-			        else
-					{
-            			printf("\n\nNo existe");
-            			break;
-        			}
-		        }
 		        
-		        fclose(archivo);
-		        */
+	
+		        //by_autor:
+		        	printf("\n ======");
+					printf("\n LIBROS");
+					printf("\n ======\n");
+			    	printf("\n  (Autor, Isbn, Titulo, Tema, Anio Publicacion.)");
+			    	printf("\n   --------------------------------------------\n\n");
+		        	goto autor_libro;
+
+		    /*BUSCAR EN LIBROS POR AUTOR*/
+
+		        autor_libro:
+		        	
+		        	found = 0;
+		        	cont = 0;
+		        	
+			        while(1)
+					{
+						/*
+							fread[editar]
+							size_t fread ( void * ptr, size_t size, size_t count, FILE * stream );
+							
+							Esta funciÃ³n lee un bloque de una "stream" de datos. EfectÃºa la lectura de un arreglo 
+							de elementos "count", cada uno de los cuales tiene un tamaÃ±o definido por "size". 
+							Luego los guarda en el bloque de memoria especificado por "ptr". El indicador de posiciÃ³n 
+							de la cadena de caracteres avanza hasta leer la totalidad de bytes. Si esto es exitoso la 
+							cantidad de bytes leÃ­dos es (size*count).
+							
+							
+							PARAMETROS:
+							
+							ptr  : Puntero a un bloque de memoria con un tamaÃ±o mÃ­nimo de (size*count) bytes.
+							size  : TamaÃ±o en bytes de cada elemento (de los que voy a leer).
+							count : NÃºmero de elementos, los cuales tienen un tamaÃ±o "size".
+							stream: Puntero a objetos FILE, que especifica la cadena de entrada.
+						*/
+						
+						
+						fread(&libro1,sizeof(libro1),1,archivo_buscar);
+						
+						// Fin archivo int feof(FILE *fichero);
+						if(feof(archivo_buscar))
+						{
+							break;
+						}
+						
+						// strcmp compara cadenas
+						if(strcmp(busq,libro1.autors)==0)
+						{
+							printf("   %s, ",libro1.autors);
+							printf("%d, ",libro1.ISBN);
+							printf("%s, ",libro1.titulo);
+							printf("%s, ",libro1.tema);
+							printf("%d.\n",libro1.anio_publicacion);
+							
+							cont++;
+						}
+						
+					}
+
+					if(found==0)
+					{
+						if(cont==0)
+						{
+							printf("   No hay registros en LIBROS para este autor.\n");	
+						}
+						
+						printf("\n ===========");
+						printf("\n MONOGRAFIAS");
+						printf("\n ===========\n");
+						printf("\n  (Autor, Titulo, Tema.)\n");
+		        		goto autor_monografia;				
+					}
+
+			/*BUSCAR EN MONOGRAFIA POR AUTOR*/
+
+		        autor_monografia:
+		        	
+		        	found = 0;
+		        	cont = 0;
+		        	
+		        	printf("\n found: %d, Count: %d\n", found, cont);
+		        	
+		        	
+			        while(1)
+					{
+						
+						fread(&monografia1,sizeof(monografia1),1,archivo_buscar);
+						
+						// Fin archivo int feof(FILE *fichero);
+						if(feof(archivo_buscar))
+						{
+							break;
+						}
+						
+						// strcmp compara cadenas
+						if(strcmp(busq,monografia1.autors)==0)
+						{
+							printf("   %s, ",monografia1.autors);
+							printf("%s, ",monografia1.titulo);
+							printf("%d.\n",monografia1.tema);
+						}
+						
+					}
+
+					if(found==0)
+					{
+						if(cont==0)
+						{
+							printf("   No hay registros en MONOGRAFIAS para este autor.\n");	
+						}
+						
+						printf("\n =========");
+						printf("\n ARTICULOS");
+						printf("\n =========\n");
+						printf("\n  (Autor, Titulo, Tema, Nombre revista, Paginas.)");
+						printf("\n   ---------------------------------------------\n\n");
+		        		goto autor_articulo;				
+					}
+
+			/*BUSCAR EN ARTICULO POR AUTOR*/
+
+		        autor_articulo:
+		        	
+		        	found = 0;
+		        	cont = 0;
+		        	
+			        while(1)
+					{
+						
+						fread(&articulo1,sizeof(articulo1),1,archivo_buscar);
+						
+						// Fin archivo int feof(FILE *fichero);
+						if(feof(archivo_buscar))
+						{
+							break;
+						}
+						
+						// strcmp compara cadenas
+						if(strcmp(busq,articulo1.autors)==0)
+						{
+							printf("   %s, ",articulo1.autors);
+							printf("%s, ",articulo1.titulo);
+							printf("%s, ",articulo1.tema);
+							printf("%s, ",articulo1.nombre_revista);
+							printf("%s\n",articulo1.paginas);
+						}
+						
+					}
+
+					if(found==0)
+					{
+						if(cont==0)
+						{
+							printf("   No hay registros en ARTICULOS para este autor.\n");	
+						}
+						
+						printf("\n ======");
+						printf("\n AUDIOS");
+						printf("\n ======\n");
+						printf("\n  (Autor, Titulo, Tema, Formato, Duracion.)");
+						printf("\n   ---------------------------------------\n\n");
+		        		goto autor_audio;				
+					}
+
+
+			/*BUSCAR EN AUDIO POR AUTOR*/
+
+		        autor_audio:
+		        	
+		        	found = 0;
+		        	cont = 0;
+		        	
+			        while(1)
+					{
+						
+						fread(&audio1,sizeof(audio1),1,archivo_buscar);
+						
+						// Fin archivo int feof(FILE *fichero);
+						if(feof(archivo_buscar))
+						{
+							break;
+						}
+						
+						// strcmp compara cadenas
+						if(strcmp(busq,audio1.autors)==0)
+						{
+							printf("   %s, ",audio1.autors);
+							printf("%s, ",audio1.titulo);
+							printf("%s, ",audio1.tema);
+							printf("%s, ",audio1.formato);
+							printf("%s\n",audio1.duracion);
+						}
+						
+					}
+
+					if(found==0)
+					{
+						if(cont==0)
+						{
+							printf("   No hay registros en AUDIOS para este autor.\n");	
+						}
+						
+						printf("\n ======");
+						printf("\n VIDOES");
+						printf("\n ======\n");
+						printf("\n  (Autor, Titulo, Tema, Formato, Duracion.)");
+						printf("\n   ---------------------------------------\n\n");
+		        		goto autor_video;				
+					}
+
+
+			/*BUSCAR EN VIDEO POR AUTOR*/
+
+		        autor_video:
+		        	
+		        	found = 0;
+		        	cont = 0;
+		        	
+			        while(1)
+					{
+						
+						fread(&video1,sizeof(video1),1,archivo_buscar);
+						
+						// Fin archivo int feof(FILE *fichero);
+						if(feof(archivo_buscar))
+						{
+							break;
+						}
+						
+						// strcmp compara cadenas
+						if(strcmp(busq,video1.autors)==0)
+						{
+							printf("   %s, ",video1.autors);
+							printf("%s, ",video1.titulo);
+							printf("%s, ",video1.tema);
+							printf("%s, ",video1.formato);
+							printf("%s\n",video1.duracion);
+						}
+						
+					}
+
+					if(found==0)
+					{
+						if(cont==0)
+						{
+							printf("   No hay registros en VIDEOS para este autor.\n");	
+						}
+						
+						printf("\n ====");
+						printf("\n URIS");
+						printf("\n ====\n");
+						printf("\n  (Autor, Titulo, Tema, Uri, Idioma.)");
+						printf("\n   ---------------------------------\n\n");
+		        		goto autor_uri;				
+					}
+
+
+			/*BUSCAR EN URI POR AUTOR*/
+
+		        autor_uri:
+		        	
+		        	found = 0;
+		        	cont = 0;
+		        	
+			        while(1)
+					{
+						
+						fread(&uri1,sizeof(uri1),1,archivo_buscar);
+						
+						// Fin archivo int feof(FILE *fichero);
+						if(feof(archivo_buscar))
+						{
+							break;
+						}
+						
+						// strcmp compara cadenas
+						if(strcmp(busq,uri1.autors)==0)
+						{
+							printf("   %s, ",uri1.autors);
+							printf("%s, ",uri1.titulo);
+							printf("%s, ",uri1.tema);
+							printf("%s, ",uri1.uri);
+							printf("%s\n",uri1.idioma);
+						}
+
+					}
+
+					if(found==0)
+					{
+						if(cont==0)
+						{
+							printf("   No hay registros en URIS para este autor.\n");	
+						}				
+					}
+
+
+				//Cierro el archivo
+				fclose(archivo_buscar);     
+		        
+		break;
+
+
+		case 2:	/*BUSCAR POR TITULO*/
+
+				//se abre el archivo
+				archivo_buscar= fopen(nombrearchivo, "rb");
+				
+				//Ingresar termino a buscar
+				printf("\n  Autor a Buscar: ");
+			    fflush(stdin);
+			    gets(busq);
+		        
+		        printf("\n  (Titulo, Isbn, Autor, Tema, Fecha Publicacion)\n\n");
 		        
 		        
 		        while(1)
 				{
-					/*
-						fread[editar]
-						size_t fread ( void * ptr, size_t size, size_t count, FILE * stream );
-						
-						Esta función lee un bloque de una "stream" de datos. Efectúa la lectura de un arreglo 
-						de elementos "count", cada uno de los cuales tiene un tamaño definido por "size". 
-						Luego los guarda en el bloque de memoria especificado por "ptr". El indicador de posición 
-						de la cadena de caracteres avanza hasta leer la totalidad de bytes. Si esto es exitoso la 
-						cantidad de bytes leídos es (size*count).
-						
-						
-						PARAMETROS:
-						
-						ptr  : Puntero a un bloque de memoria con un tamaño mínimo de (size*count) bytes.
-						size  : Tamaño en bytes de cada elemento (de los que voy a leer).
-						count : Número de elementos, los cuales tienen un tamaño "size".
-						stream: Puntero a objetos FILE, que especifica la cadena de entrada.
-					*/
-					
 					
 					fread(&libro1,sizeof(libro1),1,archivo_buscar);
 					
@@ -555,22 +740,59 @@ void buscar (int opcion)
 					}
 					
 					// strcmp compara cadenas
-					if(strcmp(busq,libro1.autors)==0)
+					if(strcmp(busq,libro1.titulo)==0)
 					{
-						printf("\n========================================================\n\n");
-						printf("\t\t Arcchivos autor: %s\n\n",libro1.autors);
-						printf("========================================================\n\n");
-						
-						printf("ISB\tTITULO\tTEMA\tPUBLICACION\n\n");
-						
-						printf("%d\t",libro1.ISBN);
-						printf("%s\t",libro1.titulo);
-						printf("%s\t",libro1.tema);
-						printf("%d\t\n\n",libro1.anio_publicacion);
-						
-						printf("========================================================\n\n");
-					
+						printf("   %s, ",libro1.titulo);
+						printf("%d, ",libro1.ISBN);
+						printf("%s, ",libro1.autors);
+						printf("%s, ",libro1.tema);
+						printf("%d.\n",libro1.anio_publicacion);
 					}
+					
+				}
+				if(found==0)
+				{
+					printf("\nNo hay mas regstros..");
+				}
+				fclose(archivo_buscar);
+		        
+		        
+		break;
+
+		case 3:	/*BUSCAR POR TEMA*/
+
+				//se abre el archivo
+				archivo_buscar= fopen(nombrearchivo, "rb");
+				
+				//Ingresar termino a buscar
+				printf("\n  Autor a Buscar: ");
+			    fflush(stdin);
+			    gets(busq);
+		        
+		        printf("\n  (Tema, Isbn, Titulo, Autor, Fecha Publicacion)\n\n");
+		        
+		        
+		        while(1)
+				{
+					
+					fread(&libro1,sizeof(libro1),1,archivo_buscar);
+					
+					// Fin archivo int feof(FILE *fichero);
+					if(feof(archivo_buscar))
+					{
+						break;
+					}
+					
+					// strcmp compara cadenas
+					if(strcmp(busq,libro1.titulo)==0)
+					{
+						printf("   %s, ",libro1.tema);
+						printf("%d, ",libro1.ISBN);
+						printf("%s, ",libro1.titulo);
+						printf("%s, ",libro1.autors);
+						printf("%d.\n",libro1.anio_publicacion);
+					}
+					
 				}
 				if(found==0)
 				{
@@ -608,7 +830,7 @@ int main (void)
 					system ("cls"); 
         
         			menu_busqueda(); 
-					printf ("Ingrese la opción seleccionada:  "); 
+					printf ("Ingrese la opcion seleccionada:  "); 
         			scanf ("%d",&opc_busqueda);
 				
 					//Menu Busqueda
@@ -651,7 +873,7 @@ int main (void)
 					system ("cls"); 
         
         			menu_admon_recursos();
-					printf ("Ingrese la opción seleccionada:  "); 
+					printf ("Ingrese la opcion seleccionada:  "); 
         			scanf ("%d",&opc_admin);
 					
 					//Menu Administracion Recursos
@@ -662,7 +884,7 @@ int main (void)
 								system ("cls"); 
         
 			        			menu_admon_recursos_agregar();
-								printf ("Ingrese la opción seleccionada:  "); 
+								printf ("Ingrese la opcion seleccionada:  "); 
 			        			scanf ("%d",&opc_admin_agrear);
 
 			        			switch(opc_admin_agrear)
@@ -720,7 +942,7 @@ int main (void)
 					system ("cls"); 
         
         			menu_config();
-					printf ("Ingrese la opción seleccionada:  "); 
+					printf ("Ingrese la opcion seleccionada:  "); 
         			scanf ("%d",&opc_config);
 				
 					//Menu Configuracion Biblioteca
@@ -731,7 +953,7 @@ int main (void)
 								
 								menu_config_tipos();
 								
-								printf ("Ingrese la opción seleccionada:  "); 
+								printf ("Ingrese la opcion seleccionada:  "); 
         						scanf ("%d",&opc_config_tipos);
         						
         						switch(opc_config_tipos)
@@ -748,7 +970,7 @@ int main (void)
 								
 								menu_config_metadatos();
 								
-								printf ("Ingrese la opción seleccionada:  "); 
+								printf ("Ingrese la opcion seleccionada:  "); 
         						scanf ("%d",&opc_config_metadatos);
         						
         						switch(opc_config_metadatos)
