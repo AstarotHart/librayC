@@ -235,7 +235,7 @@ void crear_recurso (int opcion)
 			    
 		case 2:	/*RECURSO MONOGRAFIA*/
 
-				archivo= fopen(nombrearchivo, "a"); //abro el archivo
+				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
 	
 			    //Ingresar datos 
 			    printf("\ningrese el Titulo: ");
@@ -259,7 +259,7 @@ void crear_recurso (int opcion)
 
 		case 3:	/*RECURSO ARTICULO*/
 
-				archivo= fopen(nombrearchivo, "a"); //abro el archivo
+				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
 	
 			    //Ingresar datos 
 			    printf("\ningrese el Titulo: ");
@@ -291,7 +291,7 @@ void crear_recurso (int opcion)
 
 		case 4:	/*RECURSO AUDIO*/
 
-				archivo= fopen(nombrearchivo, "a"); //abro el archivo
+				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
 	
 			    //Ingresar datos 
 			    printf("\ningrese el Titulo: ");
@@ -323,7 +323,7 @@ void crear_recurso (int opcion)
 
 		case 5:	/*RECURSO VIDEO*/
 
-				archivo= fopen(nombrearchivo, "a"); //abro el archivo
+				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
 	
 			    //Ingresar datos 
 			    printf("\ningrese el Titulo: ");
@@ -355,7 +355,7 @@ void crear_recurso (int opcion)
 
 		case 6:	/*RECURSO URI*/
 			    
-				archivo= fopen(nombrearchivo, "a"); //abro el archivo
+				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
 	
 			    //Ingresar datos 
 			    printf("\ningrese el Titulo: ");
@@ -403,20 +403,20 @@ void buscar (int opcion)
 		*/
 		
 		case 1:	/*BUSCAR POR AUTOR*/
-
-				//se abre el archivo
-				archivo_buscar= fopen(nombrearchivo, "rb");
 				
 				//Ingresar termino a buscar
 				printf("\n  Autor a Buscar: ");
 			    fflush(stdin);
 			    gets(busq);
+			    
+			    //se abre el archivo
+				archivo_buscar= fopen(nombrearchivo_buscar, "rb");
 		        
 	
 		        //by_autor:
-		        	printf("\n ======");
-					printf("\n LIBROS");
-					printf("\n ======\n");
+		        	printf("\n =================================================");
+					printf("\n\t\t\tLIBROS");
+					printf("\n =================================================\n");
 			    	printf("\n  (Autor, Isbn, Titulo, Tema, Anio Publicacion.)");
 			    	printf("\n   --------------------------------------------\n\n");
 		        	goto autor_libro;
@@ -427,6 +427,9 @@ void buscar (int opcion)
 		        	
 		        	found = 0;
 		        	cont = 0;
+		        	
+		        	//se abre el archivo
+					//archivo_buscar= fopen(nombrearchivo_buscar, "rb");
 		        	
 			        while(1)
 					{
@@ -479,12 +482,16 @@ void buscar (int opcion)
 							printf("   No hay registros en LIBROS para este autor.\n");	
 						}
 						
-						printf("\n ===========");
-						printf("\n MONOGRAFIAS");
-						printf("\n ===========\n");
-						printf("\n  (Autor, Titulo, Tema.)\n");
+						printf("\n =================================================");
+						printf("\n\t\t      MONOGRAFIAS");
+						printf("\n =================================================\n");
+						printf("\n  (Autor, Titulo, Tema.)");
+						printf("\n   ---------------------------------------------\n\n");
 		        		goto autor_monografia;				
 					}
+					
+					//Cierro el archivo
+					//fclose(archivo_buscar);
 
 			/*BUSCAR EN MONOGRAFIA POR AUTOR*/
 
@@ -493,8 +500,8 @@ void buscar (int opcion)
 		        	found = 0;
 		        	cont = 0;
 		        	
-		        	printf("\n found: %d, Count: %d\n", found, cont);
-		        	
+		        	//se abre el archivo
+					//archivo_buscar= fopen(nombrearchivo_buscar, "rb");
 		        	
 			        while(1)
 					{
@@ -524,13 +531,16 @@ void buscar (int opcion)
 							printf("   No hay registros en MONOGRAFIAS para este autor.\n");	
 						}
 						
-						printf("\n =========");
-						printf("\n ARTICULOS");
-						printf("\n =========\n");
+						printf("\n =================================================");
+						printf("\n\t\t       ARTICULOS");
+						printf("\n =================================================\n");
 						printf("\n  (Autor, Titulo, Tema, Nombre revista, Paginas.)");
 						printf("\n   ---------------------------------------------\n\n");
 		        		goto autor_articulo;				
 					}
+					
+					//Cierro el archivo
+					//fclose(archivo_buscar);
 
 			/*BUSCAR EN ARTICULO POR AUTOR*/
 
@@ -538,6 +548,9 @@ void buscar (int opcion)
 		        	
 		        	found = 0;
 		        	cont = 0;
+		        	
+		        	//se abre el archivo
+					//archivo_buscar= fopen(nombrearchivo_buscar, "rb");
 		        	
 			        while(1)
 					{
@@ -569,14 +582,16 @@ void buscar (int opcion)
 							printf("   No hay registros en ARTICULOS para este autor.\n");	
 						}
 						
-						printf("\n ======");
-						printf("\n AUDIOS");
-						printf("\n ======\n");
+						printf("\n =================================================");
+						printf("\n\t\t\tAUDIOS");
+						printf("\n =================================================\n");
 						printf("\n  (Autor, Titulo, Tema, Formato, Duracion.)");
 						printf("\n   ---------------------------------------\n\n");
 		        		goto autor_audio;				
 					}
-
+					
+					//Cierro el archivo
+					//fclose(archivo_buscar);
 
 			/*BUSCAR EN AUDIO POR AUTOR*/
 
@@ -584,6 +599,9 @@ void buscar (int opcion)
 		        	
 		        	found = 0;
 		        	cont = 0;
+		        	
+		        	//se abre el archivo
+					//archivo_buscar= fopen(nombrearchivo_buscar, "rb");
 		        	
 			        while(1)
 					{
@@ -615,13 +633,16 @@ void buscar (int opcion)
 							printf("   No hay registros en AUDIOS para este autor.\n");	
 						}
 						
-						printf("\n ======");
-						printf("\n VIDOES");
-						printf("\n ======\n");
+						printf("\n =================================================");
+						printf("\n\t\t\tVIDEOS");
+						printf("\n =================================================\n");
 						printf("\n  (Autor, Titulo, Tema, Formato, Duracion.)");
 						printf("\n   ---------------------------------------\n\n");
 		        		goto autor_video;				
 					}
+					
+					//Cierro el archivo
+					//fclose(archivo_buscar);
 
 
 			/*BUSCAR EN VIDEO POR AUTOR*/
@@ -661,14 +682,14 @@ void buscar (int opcion)
 							printf("   No hay registros en VIDEOS para este autor.\n");	
 						}
 						
-						printf("\n ====");
-						printf("\n URIS");
-						printf("\n ====\n");
+						printf("\n =================================================");
+						printf("\n\t\t\t URIS");
+						printf("\n =================================================\n");
 						printf("\n  (Autor, Titulo, Tema, Uri, Idioma.)");
 						printf("\n   ---------------------------------\n\n");
 		        		goto autor_uri;				
 					}
-
+					
 
 			/*BUSCAR EN URI POR AUTOR*/
 
