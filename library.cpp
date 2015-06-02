@@ -7,84 +7,37 @@
 
 /* ============================== ESTRUCTURAS =============================== */
 
-// Estructura LIBRO
-typedef struct libro
+// Estructura GENERAL
+typedef struct general
 {
-	int		ISBN;
-	char 	titulo[120];
+	char	tipo[10];
+	char	ISBN[10];
+	char 	titulo[60];
 	char 	autors[60];
-	char 	tema[120];
-	int		anio_publicacion;
+	char 	tema[60];
+	char	anio_publicacion[4];
+	//para articulo
+	char	nombre_revista[60];
+	char	paginas[10];
+	// para audio y video
+	char	formato[5];
+	char	duracion[12];
+	//para uri
+	char	uri[200];
+	char	idioma[12];
 };
 
-// Estructura MONOGRAFIA
-typedef struct monografia
-{
-
-	char 	titulo[120];
-	char 	autors[60];
-	char 	tema[120];
-};
-
-// Estructura ARTICULO
-typedef struct articulo
-{
-
-	char 	titulo[120];
-	char 	autors[60];
-	char 	tema[120];
-	char	nombre_revista[120];
-	char	paginas[120];
-};
-
-// Estructura AUDIO
-typedef struct audio
-{
-	char 	titulo[120];
-	char 	autors[60];
-	char 	tema[120];
-	char	formato[20];
-	char	duracion[60];
-};
-
-// Estructura VIDEO
-typedef struct video
-{
-	char 	titulo[120];
-	char 	autors[60];
-	char 	tema[120];
-	char	formato[20];
-	char	duracion[60];
-};
-
-// Estructura RECURSO WEB
-typedef struct uri
-{
-	char 	titulo[120];
-	char 	autors[60];
-	char 	tema[120];
-	char	uri[800];
-	char	idioma[120];
-};
 
 /* VARIABLES GLOBALES */
-libro libro1;
-monografia monografia1;
-articulo articulo1;
-audio audio1;
-video video1;
-uri uri1;
+
+// declaro una estructura general1 tipo GENERAL
+general general1;
+
 
 // para ingresar
-FILE* archivo= NULL;
+FILE *archivo= NULL;
 //char* nombrearchivo = "Library.txt";
-
 char nombrearchivo[]={"library.dat"};
-
-// para buscar
-FILE* archivo_buscar= NULL;
-//char* nombrearchivo_buscar = "Library.txt";
-char nombrearchivo_buscar[]={"library.dat"};
 
 
 /* ============================== PROTOTIPOS ================================ */
@@ -114,7 +67,12 @@ void crear_recurso (int opcion);
 
 
 /* =============================== FUNCIONES ================================ */
-
+void EliminarRetornoLinea(char *cad)
+{
+   int i;
+   // la funci�n fgets captura el retorno de l�nea, hay que eliminarlo:
+   for(i = strlen(cad)-1; i >= 0 && cad[i] < ' '; i--) cad[i] = 0;
+}
 
 /* -------------------------- MENUS -------------------------- */
 
@@ -197,61 +155,104 @@ void menu_config_metadatos (void)
 //Funcion con la cual se ingresarn los recuros, cualquiera de ellos.
 void crear_recurso (int opcion)
 {	
+	// Este modo permite leer y escribir
+	archivo = fopen(nombrearchivo, "r+b");
+   	
+   	// si el fichero no existe, lo crea.
+	if(!archivo)
+   	{
+   		archivo = fopen(nombrearchivo, "w+b");
+   	}
+   	
+   	// Cierra el archivo
+   	fclose(archivo);
 	
 	switch(opcion)
 	{	
 		case 1:	/*RECURSO LIBRO*/
-
+				
+				/*
+				char	ISBN[10];
+				char 	titulo[60];
+				char 	autors[60];
+				char 	tema[60];
+				char	anio_publicacion[4];
+			//para articulo
+				char	nombre_revista[60];
+				char	paginas[10];
+			// para audio y video
+				char	formato[5];
+				char	duracion[12];
+			//para uri
+				char	uri[200];
+				char	idioma[12];
+				*/
+				
 				//se abre el archivo
 				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
 	
 				    //Ingresar datos
-				    printf("Ingrese ISBN: ");
+				    strcpy(general1.tipo,"libro");
+				    
+				    printf("\nIngrese ISBN: ");
 				    fflush(stdin);
-				    scanf("%d",&libro1.ISBN);
+				    fgets(general1.ISBN, 10, stdin);
+				    EliminarRetornoLinea(general1.ISBN);
 				    
 				    printf("\ningrese el Titulo: ");
 				    fflush(stdin);
-				    gets(libro1.titulo);
+				    fgets(general1.titulo, 60, stdin);
+				    EliminarRetornoLinea(general1.titulo);
 				    
 				    printf("\nIngrese el Autor(es): ");
 				    fflush(stdin);
-				    gets(libro1.autors);
+				    fgets(general1.autors, 60, stdin);
+				    EliminarRetornoLinea(general1.autors);
 				    
 				    printf("\nIngrese Tema: ");
 				    fflush(stdin);
-				    gets(libro1.tema);
+				    fgets(general1.tema, 60, stdin);
+				    EliminarRetornoLinea(general1.tema);
 				    
 				    printf("\nIngrese el Anio de Pulicacion: ");
 				    fflush(stdin);
-				    scanf("%d",&libro1.anio_publicacion);
-				
-					/*OTRA FORMA*/
-					fwrite(&libro1,sizeof(libro1),1,archivo);
+				    fgets(general1.anio_publicacion, 5, stdin);
+				    EliminarRetornoLinea(general1.anio_publicacion);
+
 					
-				    fclose(archivo);
+					/*FORMA CON FSEEK*/
+					fseek(archivo, 0, SEEK_END);
+   					fwrite(&general1, sizeof(general), 1, archivo);
+					
+				fclose(archivo);
 			    
 			    break;
 			    
 		case 2:	/*RECURSO MONOGRAFIA*/
 
 				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
-	
-			    //Ingresar datos 
-			    printf("\ningrese el Titulo: ");
-			    fflush(stdin);
-			    gets(monografia1.titulo);
-			    
-			    printf("\nIngrese el Autor(es): ");
-			    fflush(stdin);
-			    gets(monografia1.autors);
-			    
-			    printf("\nIngrese Tema: ");
-			    fflush(stdin);
-			    gets(monografia1.tema);
+					
+					//Ingresar datos
+				    strcpy(general1.tipo,"monografia");
 
-			    // Escribir datos en el archivo
-				fwrite(&monografia1,sizeof(monografia1),1,archivo);
+				    printf("\ningrese el Titulo: ");
+				    fflush(stdin);
+				    fgets(general1.titulo, 60, stdin);
+				    EliminarRetornoLinea(general1.titulo);
+				    
+				    printf("\nIngrese el Autor(es): ");
+				    fflush(stdin);
+				    fgets(general1.autors, 60, stdin);
+				    EliminarRetornoLinea(general1.autors);
+				    
+				    printf("\nIngrese Tema: ");
+				    fflush(stdin);
+				    fgets(general1.tema, 60, stdin);
+				    EliminarRetornoLinea(general1.tema);
+					
+					/*FORMA CON FSEEK*/
+					fseek(archivo, 0, SEEK_END);
+   					fwrite(&general1, sizeof(general), 1, archivo);
 				
 			    fclose(archivo);
 			    
@@ -261,29 +262,37 @@ void crear_recurso (int opcion)
 
 				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
 	
-			    //Ingresar datos 
-			    printf("\ningrese el Titulo: ");
-			    fflush(stdin);
-			    gets(articulo1.titulo);
-			    
-			    printf("\nIngrese el Autor(es): ");
-			    fflush(stdin);
-			    gets(articulo1.autors);
-			    
-			    printf("\nIngrese Tema: ");
-			    fflush(stdin);
-			    gets(articulo1.tema);
+				    //Ingresar datos
+					strcpy(general1.tipo,"articulo");
 
-			    printf("\nIngrese Nombre de la revista: ");
-			    fflush(stdin);
-			    gets(articulo1.nombre_revista);
-
-			    printf("\nIngrese rango de paginas articulo: ");
-			    fflush(stdin);
-			    gets(articulo1.paginas);
-
-			     // Escribir datos en el archivo
-				fwrite(&articulo1,sizeof(articulo1),1,archivo);
+				    printf("\ningrese el Titulo: ");
+				    fflush(stdin);
+				    fgets(general1.titulo, 60, stdin);
+				    EliminarRetornoLinea(general1.titulo);
+				    
+				    printf("\nIngrese el Autor(es): ");
+				    fflush(stdin);
+				    fgets(general1.autors, 60, stdin);
+				    EliminarRetornoLinea(general1.autors);
+				    
+				    printf("\nIngrese Tema: ");
+				    fflush(stdin);
+				    fgets(general1.tema, 60, stdin);
+				    EliminarRetornoLinea(general1.tema);
+	
+				    printf("\nIngrese Nombre de la revista: ");
+				    fflush(stdin);
+				    fgets(general1.nombre_revista, 60, stdin);
+				    EliminarRetornoLinea(general1.nombre_revista);
+	
+				    printf("\nIngrese rango de paginas articulo: ");
+				    fflush(stdin);
+				    fgets(general1.paginas, 10, stdin);
+				    EliminarRetornoLinea(general1.paginas);
+					
+					/*FORMA CON FSEEK*/
+					fseek(archivo, 0, SEEK_END);
+   					fwrite(&general1, sizeof(general), 1, archivo);
 
 			    fclose(archivo);
 			    
@@ -293,29 +302,37 @@ void crear_recurso (int opcion)
 
 				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
 	
-			    //Ingresar datos 
-			    printf("\ningrese el Titulo: ");
-			    fflush(stdin);
-			    gets(audio1.titulo);
-			    
-			    printf("\nIngrese el Autor(es): ");
-			    fflush(stdin);
-			    gets(audio1.autors);
-			    
-			    printf("\nIngrese Tema: ");
-			    fflush(stdin);
-			    gets(audio1.tema);
+				    //Ingresar datos 
+					strcpy(general1.tipo,"audio");
 
-			    printf("\nIngrese formato de del audio: ");
-			    fflush(stdin);
-			    gets(audio1.formato);
-
-			    printf("Ingrese duracion del audio (hh:mm:ss): ");
-			    fflush(stdin);
-			    gets(audio1.duracion);
-
-			     // Escribir datos en el archivo
-				fwrite(&audio1,sizeof(audio1),1,archivo);
+				    printf("\ningrese el Titulo: ");
+				    fflush(stdin);
+				    fgets(general1.titulo, 60, stdin);
+				    EliminarRetornoLinea(general1.titulo);
+				    
+				    printf("\nIngrese el Autor(es): ");
+				    fflush(stdin);
+				    fgets(general1.autors, 60, stdin);
+				    EliminarRetornoLinea(general1.autors);
+				    
+				    printf("\nIngrese Tema: ");
+				    fflush(stdin);
+				    fgets(general1.tema, 60, stdin);
+				    EliminarRetornoLinea(general1.tema);
+	
+				    printf("\nIngrese formato de del audio: ");
+				    fflush(stdin);
+				    fgets(general1.formato, 5, stdin);
+				    EliminarRetornoLinea(general1.formato);
+	
+				    printf("\nIngrese duracion del audio (hh:mm:ss): ");
+				    fflush(stdin);
+				    fgets(general1.duracion, 5, stdin);
+				    EliminarRetornoLinea(general1.duracion);
+					
+					/*FORMA CON FSEEK*/
+					fseek(archivo, 0, SEEK_END);
+   					fwrite(&general1, sizeof(general), 1, archivo);
 			    
 			    fclose(archivo);
 			    
@@ -325,29 +342,37 @@ void crear_recurso (int opcion)
 
 				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
 	
-			    //Ingresar datos 
-			    printf("\ningrese el Titulo: ");
-			    fflush(stdin);
-			    gets(video1.titulo);
-			    
-			    printf("\nIngrese el Autor(es): ");
-			    fflush(stdin);
-			    gets(video1.autors);
-			    
-			    printf("\nIngrese Tema: ");
-			    fflush(stdin);
-			    gets(video1.tema);
+				    //Ingresar datos 
+					strcpy(general1.tipo,"video");
 
-			    printf("\nIngrese formato de video: ");
-			    fflush(stdin);
-			    gets(video1.formato);
-
-			    printf("Ingrese duracion del video (hh:mm:ss): ");
-			    fflush(stdin);
-			    gets(video1.duracion);
-
-			     // Escribir datos en el archivo
-				fwrite(&video1,sizeof(video1),1,archivo);
+				    printf("\ningrese el Titulo: ");
+				    fflush(stdin);
+				    fgets(general1.titulo, 60, stdin);
+				    EliminarRetornoLinea(general1.titulo);
+				    
+				    printf("\nIngrese el Autor(es): ");
+				    fflush(stdin);
+				    fgets(general1.autors, 60, stdin);
+				    EliminarRetornoLinea(general1.autors);
+				    
+				    printf("\nIngrese Tema: ");
+				    fflush(stdin);
+				    fgets(general1.tema, 60, stdin);
+				    EliminarRetornoLinea(general1.tema);
+	
+				    printf("\nIngrese formato de del video: ");
+				    fflush(stdin);
+				    fgets(general1.formato, 5, stdin);
+				    EliminarRetornoLinea(general1.formato);
+	
+				    printf("\nIngrese duracion del audio (hh:mm:ss): ");
+				    fflush(stdin);
+				    fgets(general1.duracion, 5, stdin);
+				    EliminarRetornoLinea(general1.duracion);
+					
+					/*FORMA CON FSEEK*/
+					fseek(archivo, 0, SEEK_END);
+   					fwrite(&general1, sizeof(general), 1, archivo);
 			    
 			    fclose(archivo);
 			    
@@ -357,29 +382,37 @@ void crear_recurso (int opcion)
 			    
 				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
 	
-			    //Ingresar datos 
-			    printf("\ningrese el Titulo: ");
-			    fflush(stdin);
-			    gets(uri1.titulo);
-			    
-			    printf("\nIngrese el Autor(es): ");
-			    fflush(stdin);
-			    gets(uri1.autors);
-			    
-			    printf("\nIngrese Tema: ");
-			    fflush(stdin);
-			    gets(uri1.tema);
+				    //Ingresar datos
+					strcpy(general1.tipo,"uri");
 
-			    printf("\nIngrese URI: ");
-			    fflush(stdin);
-			    gets(uri1.uri);
-
-			    printf("Ingrese idioma del recurso: ");
-			    fflush(stdin);
-			    gets(uri1.idioma);
-
-			     // Escribir datos en el archivo
-				fwrite(&uri1,sizeof(uri1),1,archivo);
+				    printf("\ningrese el Titulo: ");
+				    fflush(stdin);
+				    fgets(general1.titulo, 60, stdin);
+				    EliminarRetornoLinea(general1.titulo);
+				    
+				    printf("\nIngrese el Autor(es): ");
+				    fflush(stdin);
+				    fgets(general1.autors, 60, stdin);
+				    EliminarRetornoLinea(general1.autors);
+				    
+				    printf("\nIngrese Tema: ");
+				    fflush(stdin);
+				    fgets(general1.tema, 60, stdin);
+				    EliminarRetornoLinea(general1.tema);
+	
+				    printf("\nIngrese URI: ");
+				    fflush(stdin);
+				    fgets(general1.uri, 60, stdin);
+				    EliminarRetornoLinea(general1.uri);
+	
+				    printf("\nIngrese idioma del recurso: ");
+				    fflush(stdin);
+				    fgets(general1.idioma, 60, stdin);
+				    EliminarRetornoLinea(general1.idioma);
+	
+				    /*FORMA CON FSEEK*/
+					fseek(archivo, 0, SEEK_END);
+   					fwrite(&general1, sizeof(general), 1, archivo);
 			    
 			    fclose(archivo);
 			    
@@ -392,7 +425,7 @@ void buscar (int opcion)
 {
 	char busq[60];
 	
-	int found=0, cont=0;
+	int found=0;
 	
 	switch(opcion)
 	{
@@ -404,94 +437,89 @@ void buscar (int opcion)
 		
 		case 1:	/*BUSCAR POR AUTOR*/
 				
+				int pos_puntero, pos_busqueda;
+				char busq[20];
+				
+				
 				//Ingresar termino a buscar
 				printf("\n  Autor a Buscar: ");
-			    fflush(stdin);
-			    gets(busq);
-			    
-			    //se abre el archivo
-				//archivo_buscar= fopen(nombrearchivo_buscar, "rb");
-		        
-	
-		        //by_autor:
-		        	printf("\n =================================================");
-					printf("\n\t\t\tLIBROS");
-					printf("\n =================================================\n");
-			    	printf("\n  (Autor, Isbn, Titulo, Tema, Anio Publicacion.)");
-			    	printf("\n   --------------------------------------------\n\n");
-		        	goto autor_libro;
-
-		    /*BUSCAR EN LIBROS POR AUTOR*/
-
-		        autor_libro:
-		        	
-		        	found = 0;
-		        	cont = 0;
-		        	
-		        	//se abre el archivo
-					archivo_buscar= fopen(nombrearchivo_buscar, "rb");
-		        	
-			        while(1)
+				fflush(stdin);
+				gets(busq);
+				
+				
+				printf("\n =================================================");
+				printf("\n\t\t\tLIBROS");
+				printf("\n =================================================\n");
+				printf("\n  (Autor, Isbn, Titulo, Tema, Anio Publicacion.)");
+				printf("\n   --------------------------------------------\n\n");
+				
+				goto autor_libro;
+			
+					    /*BUSCAR EN LIBROS POR AUTOR*/
+			
+				autor_libro:
+					
+					pos_puntero=0;
+					pos_busqueda=0;
+					found=0;
+					
+					archivo= fopen(nombrearchivo, "rb");
+					//fseek(archivo, sizeof(general), SEEK_CUR);
+					
+					while (1)
 					{
-						/*
-							fread[editar]
-							size_t fread ( void * ptr, size_t size, size_t count, FILE * stream );
-							
-							Esta función lee un bloque de una "stream" de datos. Efectúa la lectura de un arreglo 
-							de elementos "count", cada uno de los cuales tiene un tamaño definido por "size". 
-							Luego los guarda en el bloque de memoria especificado por "ptr". El indicador de posición 
-							de la cadena de caracteres avanza hasta leer la totalidad de bytes. Si esto es exitoso la 
-							cantidad de bytes leídos es (size*count).
-							
-							
-							PARAMETROS:
-							
-							ptr  : Puntero a un bloque de memoria con un tamaño mínimo de (size*count) bytes.
-							size  : Tamaño en bytes de cada elemento (de los que voy a leer).
-							count : Número de elementos, los cuales tienen un tamaño "size".
-							stream: Puntero a objetos FILE, que especifica la cadena de entrada.
-						*/
+						fread(&general1,sizeof(general),1,archivo);
 						
-						
-						fread(&libro1,sizeof(libro1),1,archivo_buscar);
-						
-						// Fin archivo int feof(FILE *fichero);
-						if(feof(archivo_buscar))
+						if(feof(archivo))
 						{
 							break;
 						}
 						
-						// strcmp compara cadenas
-						if(strcmp(busq,libro1.autors)==0)
+						if(strcmp(general1.tipo, "libro") == 0)
 						{
-							printf("   %s, ",libro1.autors);
-							printf("%d, ",libro1.ISBN);
-							printf("%s, ",libro1.titulo);
-							printf("%s, ",libro1.tema);
-							printf("%d.\n",libro1.anio_publicacion);
-							
-							cont++;
-						}
+							if(strcmp(general1.autors, busq) == 0)
+							{
+								pos_puntero = ftell(archivo);
+								pos_busqueda = pos_puntero - (sizeof(general1));
+								
+								fseek(archivo, pos_busqueda, SEEK_CUR);
+								
+								printf("   %s, ",general1.autors);
+								printf("%d, ",general1.ISBN);
+								printf("%s, ",general1.titulo);
+								printf("%s, ",general1.tema);
+								printf("%d.\n",general1.anio_publicacion);
+								
+								found++;
 						
+							}
+						}
 					}
-
-					if(found==0)
-					{
-						if(cont==0)
-						{
-							printf("   No hay registros en LIBROS para este autor.\n");	
-						}
-						
+					
+					if(found!=0)
+					{			
 						printf("\n =================================================");
 						printf("\n\t\t      MONOGRAFIAS");
 						printf("\n =================================================\n");
 						printf("\n  (Autor, Titulo, Tema.)");
 						printf("\n   ---------------------------------------------\n\n");
-						
+									
 						//Cierro el archivo
-						fclose(archivo_buscar);
-						
-		        		goto autor_monografia;				
+						fclose(archivo);
+									
+						rewind(archivo);
+									
+					    goto autor_monografia;				
+					}
+					
+					else
+					{
+						printf("   No hay registros en LIBROS para este autor.\n");
+									
+						//Cierro el archivo
+						fclose(archivo);
+									
+					    goto autor_monografia;
 					}
 
 
@@ -499,93 +527,117 @@ void buscar (int opcion)
 
 		        autor_monografia:
 		        	
-		        	found = 0;
-		        	cont = 0;
-		        	
-		        	//se abre el archivo
-					archivo_buscar= fopen(nombrearchivo_buscar, "rb");
-		        	
-			        while(1)
+		        	pos_puntero=0;
+					pos_busqueda=0;
+					found=0;
+					
+					//abrimos el archivo
+					archivo= fopen(nombrearchivo, "rb");
+					
+					// coloca el puntero en la primera posicion del archivo
+					rewind(archivo);
+					
+					while (1)
 					{
+						fread(&general1,sizeof(general),1,archivo);
 						
-						fread(&monografia1,sizeof(monografia1),1,archivo_buscar);
-						
-						// Fin archivo int feof(FILE *fichero);
-						if(feof(archivo_buscar))
+						if(feof(archivo))
 						{
 							break;
 						}
 						
-						// strcmp compara cadenas
-						if(strcmp(busq,monografia1.autors)==0)
+						if(strcmp(general1.tipo, "monografia") == 0)
 						{
-							printf("   %s, ",monografia1.autors);
-							printf("%s, ",monografia1.titulo);
-							printf("%d.\n",monografia1.tema);
-						}
+							if(strcmp(general1.autors, busq) == 0)
+							{
+								pos_puntero = ftell(archivo);
+								pos_busqueda = pos_puntero - (sizeof(general1));
+								
+								fseek(archivo, pos_busqueda, SEEK_CUR);
+								
+								printf("   %s, ",general1.autors);
+								printf("%s, ",general1.titulo);
+								printf("%s.\n",general1.tema);
+								
+								found++;
 						
+							}
+						}
 					}
-
-					if(found==0)
-					{
-						if(cont==0)
-						{
-							printf("   No hay registros en MONOGRAFIAS para este autor.\n");	
-						}
-						
+					
+					if(found!=0)
+					{			
 						printf("\n =================================================");
 						printf("\n\t\t       ARTICULOS");
 						printf("\n =================================================\n");
 						printf("\n  (Autor, Titulo, Tema, Nombre revista, Paginas.)");
 						printf("\n   ---------------------------------------------\n\n");
 						
+						rewind(archivo);
 						//Cierro el archivo
-						fclose(archivo_buscar);
+						fclose(archivo);
 						
 		        		goto autor_articulo;				
 					}
-
+					
+					else
+					{
+						printf("   No hay registros en MONOGRAFIAS para este autor.\n");
+									
+						//Cierro el archivo
+						fclose(archivo);
+									
+					    goto autor_articulo;
+					}
+		        	
+		        	
 
 			/*BUSCAR EN ARTICULO POR AUTOR*/
 
 		        autor_articulo:
 		        	
-		        	found = 0;
-		        	cont = 0;
-		        	
-		        	//se abre el archivo
-					archivo_buscar= fopen(nombrearchivo_buscar, "rb");
-		        	
-			        while(1)
+		        	pos_puntero=0;
+					pos_busqueda=0;
+					found=0;
+					
+					//abrimos el archivo
+					archivo= fopen(nombrearchivo, "rb");
+					
+					// coloca el puntero en la primera posicion del archivo
+					rewind(archivo);
+					
+					while (1)
 					{
+						fread(&general1,sizeof(general),1,archivo);
 						
-						fread(&articulo1,sizeof(articulo1),1,archivo_buscar);
-						
-						// Fin archivo int feof(FILE *fichero);
-						if(feof(archivo_buscar))
+						if(feof(archivo))
 						{
 							break;
 						}
 						
-						// strcmp compara cadenas
-						if(strcmp(busq,articulo1.autors)==0)
+						if(strcmp(general1.tipo, "articulo") == 0)
 						{
-							printf("   %s, ",articulo1.autors);
-							printf("%s, ",articulo1.titulo);
-							printf("%s, ",articulo1.tema);
-							printf("%s, ",articulo1.nombre_revista);
-							printf("%s\n",articulo1.paginas);
-						}
+							if(strcmp(general1.autors, busq) == 0)
+							{
+								pos_puntero = ftell(archivo);
+								pos_busqueda = pos_puntero - (sizeof(general1));
+								
+								fseek(archivo, pos_busqueda, SEEK_CUR);
+								
+								printf("   %s, ",general1.autors);
+								printf("%s, ",general1.titulo);
+								printf("%s, ",general1.tema);
+								printf("%s, ",general1.nombre_revista);
+								printf("%s\n",general1.paginas);
+								
+								found++;
 						
+							}
+						}
 					}
-
-					if(found==0)
-					{
-						if(cont==0)
-						{
-							printf("   No hay registros en ARTICULOS para este autor.\n");	
-						}
-						
+					
+					if(found!=0)
+					{			
 						printf("\n =================================================");
 						printf("\n\t\t\tAUDIOS");
 						printf("\n =================================================\n");
@@ -593,52 +645,69 @@ void buscar (int opcion)
 						printf("\n   ---------------------------------------\n\n");
 						
 						//Cierro el archivo
-						fclose(archivo_buscar);
+						fclose(archivo);
 						
 		        		goto autor_audio;				
 					}
+					
+					else
+					{
+						printf("   No hay registros en ARTICULOS para este autor.\n");
+									
+						//Cierro el archivo
+						fclose(archivo);
+									
+					    goto autor_audio;
+					}
+		        	
 
 
 			/*BUSCAR EN AUDIO POR AUTOR*/
 
 		        autor_audio:
 		        	
-		        	found = 0;
-		        	cont = 0;
-		        	
-		        	//se abre el archivo
-					archivo_buscar= fopen(nombrearchivo_buscar, "rb");
-		        	
-			        while(1)
+		        	pos_puntero=0;
+					pos_busqueda=0;
+					found=0;
+					
+					//abrimos el archivo
+					archivo= fopen(nombrearchivo, "rb");
+					
+					// coloca el puntero en la primera posicion del archivo
+					rewind(archivo);
+					
+					while (1)
 					{
+						fread(&general1,sizeof(general),1,archivo);
 						
-						fread(&audio1,sizeof(audio1),1,archivo_buscar);
-						
-						// Fin archivo int feof(FILE *fichero);
-						if(feof(archivo_buscar))
+						if(feof(archivo))
 						{
 							break;
 						}
 						
-						// strcmp compara cadenas
-						if(strcmp(busq,audio1.autors)==0)
+						if(strcmp(general1.tipo, "audio") == 0)
 						{
-							printf("   %s, ",audio1.autors);
-							printf("%s, ",audio1.titulo);
-							printf("%s, ",audio1.tema);
-							printf("%s, ",audio1.formato);
-							printf("%s\n",audio1.duracion);
-						}
+							if(strcmp(general1.autors, busq) == 0)
+							{
+								pos_puntero = ftell(archivo);
+								pos_busqueda = pos_puntero - (sizeof(general1));
+								
+								fseek(archivo, pos_busqueda, SEEK_CUR);
+								
+								printf("   %s, ",general1.autors);
+								printf("%s, ",general1.titulo);
+								printf("%s, ",general1.tema);
+								printf("%s, ",general1.formato);
+								printf("%s\n",general1.duracion);
+								
+								found++;
 						
+							}
+						}
 					}
-
-					if(found==0)
-					{
-						if(cont==0)
-						{
-							printf("   No hay registros en AUDIOS para este autor.\n");	
-						}
-						
+					
+					if(found!=0)
+					{			
 						printf("\n =================================================");
 						printf("\n\t\t\tVIDEOS");
 						printf("\n =================================================\n");
@@ -646,52 +715,70 @@ void buscar (int opcion)
 						printf("\n   ---------------------------------------\n\n");
 						
 						//Cierro el archivo
-						fclose(archivo_buscar);
+						fclose(archivo);
 						
 		        		goto autor_video;				
 					}
+					
+					else
+					{
+					printf("   No hay registros en AUDIOS para este autor.\n");	
+									
+						//Cierro el archivo
+						fclose(archivo);
+									
+					    goto autor_video;
+					}
+		        	/*---------------------------------------------------------------------------------*/
+		        	
 
 
 			/*BUSCAR EN VIDEO POR AUTOR*/
 
 		        autor_video:
 		        	
-		        	found = 0;
-		        	cont = 0;
-		        	
-		        	//se abre el archivo
-					archivo_buscar= fopen(nombrearchivo_buscar, "rb");
-		        	
-			        while(1)
+		        	pos_puntero=0;
+					pos_busqueda=0;
+					found=0;
+					
+					//abrimos el archivo
+					archivo= fopen(nombrearchivo, "rb");
+					
+					// coloca el puntero en la primera posicion del archivo
+					rewind(archivo);
+					
+					while (1)
 					{
+						fread(&general1,sizeof(general),1,archivo);
 						
-						fread(&video1,sizeof(video1),1,archivo_buscar);
-						
-						// Fin archivo int feof(FILE *fichero);
-						if(feof(archivo_buscar))
+						if(feof(archivo))
 						{
 							break;
 						}
 						
-						// strcmp compara cadenas
-						if(strcmp(busq,video1.autors)==0)
+						if(strcmp(general1.tipo, "video") == 0)
 						{
-							printf("   %s, ",video1.autors);
-							printf("%s, ",video1.titulo);
-							printf("%s, ",video1.tema);
-							printf("%s, ",video1.formato);
-							printf("%s\n",video1.duracion);
-						}
+							if(strcmp(general1.autors, busq) == 0)
+							{
+								pos_puntero = ftell(archivo);
+								pos_busqueda = pos_puntero - (sizeof(general1));
+								
+								fseek(archivo, pos_busqueda, SEEK_CUR);
+								
+								printf("   %s, ",general1.autors);
+								printf("%s, ",general1.titulo);
+								printf("%s, ",general1.tema);
+								printf("%s, ",general1.formato);
+								printf("%s\n",general1.duracion);
+								
+								found++;
 						
+							}
+						}
 					}
-
-					if(found==0)
-					{
-						if(cont==0)
-						{
-							printf("   No hay registros en VIDEOS para este autor.\n");	
-						}
-						
+					
+					if(found!=0)
+					{			
 						printf("\n =================================================");
 						printf("\n\t\t\t URIS");
 						printf("\n =================================================\n");
@@ -699,145 +786,84 @@ void buscar (int opcion)
 						printf("\n   ---------------------------------\n\n");
 						
 						//Cierro el archivo
-						fclose(archivo_buscar);
+						fclose(archivo);
 						
 		        		goto autor_uri;				
 					}
+					
+					else
+					{
+						printf("   No hay registros en VIDEOS para este autor.\n");
+									
+						//Cierro el archivo
+						fclose(archivo);
+									
+					    goto autor_uri;
+					}
+		        	/*---------------------------------------------------------------------------------*/
+		        	
 					
 
 			/*BUSCAR EN URI POR AUTOR*/
 
 		        autor_uri:
 		        	
-		        	found = 0;
-		        	cont = 0;
-		        	
-		        	//se abre el archivo
-					archivo_buscar= fopen(nombrearchivo_buscar, "rb");
-		        	
-			        while(1)
+		        	pos_puntero=0;
+					pos_busqueda=0;
+					found=0;
+					
+					//abrimos el archivo
+					archivo= fopen(nombrearchivo, "rb");
+					
+					// coloca el puntero en la primera posicion del archivo
+					rewind(archivo);
+					
+					while (1)
 					{
+						fread(&general1,sizeof(general),1,archivo);
 						
-						fread(&uri1,sizeof(uri1),1,archivo_buscar);
-						
-						// Fin archivo int feof(FILE *fichero);
-						if(feof(archivo_buscar))
+						if(feof(archivo))
 						{
 							break;
 						}
 						
-						// strcmp compara cadenas
-						if(strcmp(busq,uri1.autors)==0)
+						if(strcmp(general1.tipo, "uri") == 0)
 						{
-							printf("   %s, ",uri1.autors);
-							printf("%s, ",uri1.titulo);
-							printf("%s, ",uri1.tema);
-							printf("%s, ",uri1.uri);
-							printf("%s\n",uri1.idioma);
-						}
-
-					}
-
-					if(found==0)
-					{
-						if(cont==0)
-						{
-							printf("   No hay registros en URIS para este autor.\n");	
-						}
+							if(strcmp(general1.autors, busq) == 0)
+							{
+								pos_puntero = ftell(archivo);
+								pos_busqueda = pos_puntero - (sizeof(general1));
+								
+								fseek(archivo, pos_busqueda, SEEK_CUR);
+								
+								printf("   %s, ",general1.autors);
+								printf("%s, ",general1.titulo);
+								printf("%s, ",general1.tema);
+								printf("%s, ",general1.uri);
+								printf("%s\n",general1.idioma);
+								
+								found++;
 						
-						//Cierro el archivo
-						fclose(archivo_buscar);				
+							}
+						}
 					}
-
 					
+					if(found==0)
+					{			
+						printf("   No hay registros en URIS para este autor.\n");
+						fclose(archivo);				
+					}				
 		        
 		break;
 
 
 		case 2:	/*BUSCAR POR TITULO*/
 
-				//se abre el archivo
-				archivo_buscar= fopen(nombrearchivo, "rb");
-				
-				//Ingresar termino a buscar
-				printf("\n  Autor a Buscar: ");
-			    fflush(stdin);
-			    gets(busq);
-		        
-		        printf("\n  (Titulo, Isbn, Autor, Tema, Fecha Publicacion)\n\n");
-		        
-		        
-		        while(1)
-				{
-					
-					fread(&libro1,sizeof(libro1),1,archivo_buscar);
-					
-					// Fin archivo int feof(FILE *fichero);
-					if(feof(archivo_buscar))
-					{
-						break;
-					}
-					
-					// strcmp compara cadenas
-					if(strcmp(busq,libro1.titulo)==0)
-					{
-						printf("   %s, ",libro1.titulo);
-						printf("%d, ",libro1.ISBN);
-						printf("%s, ",libro1.autors);
-						printf("%s, ",libro1.tema);
-						printf("%d.\n",libro1.anio_publicacion);
-					}
-					
-				}
-				if(found==0)
-				{
-					printf("\nNo hay mas regstros..");
-				}
-				fclose(archivo_buscar);
-		        
 		        
 		break;
 
 		case 3:	/*BUSCAR POR TEMA*/
 
-				//se abre el archivo
-				archivo_buscar= fopen(nombrearchivo, "rb");
-				
-				//Ingresar termino a buscar
-				printf("\n  Autor a Buscar: ");
-			    fflush(stdin);
-			    gets(busq);
-		        
-		        printf("\n  (Tema, Isbn, Titulo, Autor, Fecha Publicacion)\n\n");
-		        
-		        
-		        while(1)
-				{
-					
-					fread(&libro1,sizeof(libro1),1,archivo_buscar);
-					
-					// Fin archivo int feof(FILE *fichero);
-					if(feof(archivo_buscar))
-					{
-						break;
-					}
-					
-					// strcmp compara cadenas
-					if(strcmp(busq,libro1.titulo)==0)
-					{
-						printf("   %s, ",libro1.tema);
-						printf("%d, ",libro1.ISBN);
-						printf("%s, ",libro1.titulo);
-						printf("%s, ",libro1.autors);
-						printf("%d.\n",libro1.anio_publicacion);
-					}
-					
-				}
-				if(found==0)
-				{
-					printf("\nNo hay mas regstros..");
-				}
-				fclose(archivo_buscar);
 		        
 		        
 		break;
