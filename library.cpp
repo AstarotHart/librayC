@@ -34,10 +34,13 @@ typedef struct general
 general general1;
 
 
-// para ingresar
+// para ingresar al archivo LIBRARY.DAT
 FILE *archivo= NULL;
-//char* nombrearchivo = "Library.txt";
 char nombrearchivo[]={"library.dat"};
+
+// para ingresar al archivo LIBRARY.DAT
+FILE *temp= NULL;
+char nombretemp[]={"temp.dat"};
 
 
 /* ============================== PROTOTIPOS ================================ */
@@ -64,6 +67,12 @@ void menu_config_metadatos (void);
 
 //Crear RECURSO 
 void crear_recurso (int opcion);
+
+// Buscar RECURSO 
+void buscar (int opcion);
+
+// Modificar RECURSO
+void modficar_recurso (int opcion);
 
 
 /* =============================== FUNCIONES ================================ */
@@ -117,6 +126,19 @@ void menu_admon_recursos_agregar(void)
      printf (" 4.  Ingresar Audio.					\n");
      printf (" 5.  Ingresar Video.					\n");
      printf (" 6.  Ingresar URI.					\n");
+     printf (" 0.  Volver   					  \n\n");
+}
+
+// Menu Administrar Recursos Modificar
+void menu_admon_recursos_modificar(void)
+{
+     printf ("		  MODIFICAR RECURSOS		\n\n\n");
+     printf (" 1.  Modificar Libro.					\n");
+     printf (" 2.  Modificar Monografia.			\n");
+     printf (" 3.  Modificar Articulo.				\n");
+     printf (" 4.  Modificar Audio.					\n");
+     printf (" 5.  Modificar Video.					\n");
+     printf (" 6.  Modificar URI.					\n");
      printf (" 0.  Volver   					  \n\n");
 }
 
@@ -485,10 +507,10 @@ void buscar (int opcion)
 								fseek(archivo, pos_busqueda, SEEK_CUR);
 								
 								printf("   %s, ",general1.autors);
-								printf("%d, ",general1.ISBN);
+								printf("%s, ",general1.ISBN);
 								printf("%s, ",general1.titulo);
 								printf("%s, ",general1.tema);
-								printf("%d.\n",general1.anio_publicacion);
+								printf("%s.\n",general1.anio_publicacion);
 								
 								found++;
 						
@@ -1696,12 +1718,342 @@ void buscar (int opcion)
 }
 
 
+//Funcion con la cual se modfican los recuros, cualquiera de ellos.
+void modificar_recurso (int opcion)
+{	
+	int pos_puntero, pos_busqueda;
+
+	char busq[60];
+	
+	int found=0;
+	
+	switch(opcion)
+	{	
+		case 1:	/*RECURSO LIBRO*/
+				
+				pos_puntero=0;
+				pos_busqueda=0;
+				found=0;
+				
+				//Ingresar termino a buscar
+				printf("\n  ISBN a Modificar: ");
+				fflush(stdin);
+				gets(busq);
+				
+				
+				printf("\n =================================================");
+				printf("\n\t\t\tLIBROS");
+				printf("\n =================================================\n");
+				printf("\n  (Autor, Isbn, Titulo, Tema, Anio Publicacion.)");
+				printf("\n   --------------------------------------------\n\n");
+					
+				//abrimos el archivo a modificar
+				archivo= fopen(nombrearchivo, "rb+");
+				
+				//abrimos el archivo temporal
+				temp= fopen(nombretemp, "rb+");
+				
+				// si el fichero no existe, lo crea.
+				if(!temp)
+			   	{
+			   		temp = fopen(nombretemp, "w+b");
+			   	}
+					
+				// coloca el puntero en la primera posicion del archivo
+				rewind(archivo);
+					
+				while (1)
+				{
+					fread(&general1,sizeof(general),1,archivo);
+					
+					if(feof(archivo))
+					{
+						break;
+					}
+					
+					if(strcmp(general1.ISBN, busq) == 0)
+					{
+						pos_puntero = ftell(archivo);
+						pos_busqueda = pos_puntero - (sizeof(general1));
+						
+						fseek(archivo, pos_busqueda, SEEK_CUR);
+						
+					// imprimir
+						printf("   %s, ",general1.autors);
+						printf("%s, ",general1.ISBN);
+						printf("%s, ",general1.titulo);
+						printf("%s, ",general1.tema);
+						printf("%s.\n",general1.anio_publicacion);
+						
+					//Ingresar nuevos datos
+					    strcpy(general1.tipo,"libro");
+					    
+					    printf("\nIngrese ISBN: ");
+					    fflush(stdin);
+					    fgets(general1.ISBN, 10, stdin);
+					    EliminarRetornoLinea(general1.ISBN);
+					    
+					    printf("\ningrese el Titulo: ");
+					    fflush(stdin);
+					    fgets(general1.titulo, 60, stdin);
+					    EliminarRetornoLinea(general1.titulo);
+					    
+					    printf("\nIngrese el Autor(es): ");
+					    fflush(stdin);
+					    fgets(general1.autors, 60, stdin);
+					    EliminarRetornoLinea(general1.autors);
+					    
+					    printf("\nIngrese Tema: ");
+					    fflush(stdin);
+					    fgets(general1.tema, 60, stdin);
+					    EliminarRetornoLinea(general1.tema);
+					    
+					    printf("\nIngrese el Anio de Pulicacion: ");
+					    fflush(stdin);
+					    fgets(general1.anio_publicacion, 5, stdin);
+					    EliminarRetornoLinea(general1.anio_publicacion);
+	
+						
+						/*FORMA CON FSEEK*/
+						fseek(archivo, 0, SEEK_END);
+	   					fwrite(&general1, sizeof(general), 1, temp);
+						
+						found++;
+					}
+				}
+				
+				fclose(archivo);
+				fclose(temp);
+					
+				if(found==0)
+				{			
+					printf("   No hay registros en LIBROS para este ISBN.\n");
+					fclose(archivo);				
+				}
+				else
+				{
+					//abrimos el archivo a modificar
+					archivo= fopen(nombrearchivo, "wb+");
+				
+					//abrimos el archivo temporal
+					temp= fopen(nombretemp, "rb+");
+					
+					while(1)
+					{
+						fread(&general1,sizeof(general),1,temp);
+					
+						if(feof(temp))
+						{
+							break;
+						}
+						fseek(archivo, 0, SEEK_END);
+   						fwrite(&general1, sizeof(general), 1, archivo);
+					}
+				}
+					
+				fclose(archivo);
+				fclose(temp);
+			    
+		break;
+			    
+		case 2:	/*RECURSO MONOGRAFIA*/
+
+				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
+					
+					//Ingresar datos
+				    strcpy(general1.tipo,"monografia");
+
+				    printf("\ningrese el Titulo: ");
+				    fflush(stdin);
+				    fgets(general1.titulo, 60, stdin);
+				    EliminarRetornoLinea(general1.titulo);
+				    
+				    printf("\nIngrese el Autor(es): ");
+				    fflush(stdin);
+				    fgets(general1.autors, 60, stdin);
+				    EliminarRetornoLinea(general1.autors);
+				    
+				    printf("\nIngrese Tema: ");
+				    fflush(stdin);
+				    fgets(general1.tema, 60, stdin);
+				    EliminarRetornoLinea(general1.tema);
+					
+					/*FORMA CON FSEEK*/
+					fseek(archivo, 0, SEEK_END);
+   					fwrite(&general1, sizeof(general), 1, archivo);
+				
+			    fclose(archivo);
+			    
+			    break;
+
+		case 3:	/*RECURSO ARTICULO*/
+
+				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
+	
+				    //Ingresar datos
+					strcpy(general1.tipo,"articulo");
+
+				    printf("\ningrese el Titulo: ");
+				    fflush(stdin);
+				    fgets(general1.titulo, 60, stdin);
+				    EliminarRetornoLinea(general1.titulo);
+				    
+				    printf("\nIngrese el Autor(es): ");
+				    fflush(stdin);
+				    fgets(general1.autors, 60, stdin);
+				    EliminarRetornoLinea(general1.autors);
+				    
+				    printf("\nIngrese Tema: ");
+				    fflush(stdin);
+				    fgets(general1.tema, 60, stdin);
+				    EliminarRetornoLinea(general1.tema);
+	
+				    printf("\nIngrese Nombre de la revista: ");
+				    fflush(stdin);
+				    fgets(general1.nombre_revista, 60, stdin);
+				    EliminarRetornoLinea(general1.nombre_revista);
+	
+				    printf("\nIngrese rango de paginas articulo: ");
+				    fflush(stdin);
+				    fgets(general1.paginas, 10, stdin);
+				    EliminarRetornoLinea(general1.paginas);
+					
+					/*FORMA CON FSEEK*/
+					fseek(archivo, 0, SEEK_END);
+   					fwrite(&general1, sizeof(general), 1, archivo);
+
+			    fclose(archivo);
+			    
+			    break;
+
+		case 4:	/*RECURSO AUDIO*/
+
+				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
+	
+				    //Ingresar datos 
+					strcpy(general1.tipo,"audio");
+
+				    printf("\ningrese el Titulo: ");
+				    fflush(stdin);
+				    fgets(general1.titulo, 60, stdin);
+				    EliminarRetornoLinea(general1.titulo);
+				    
+				    printf("\nIngrese el Autor(es): ");
+				    fflush(stdin);
+				    fgets(general1.autors, 60, stdin);
+				    EliminarRetornoLinea(general1.autors);
+				    
+				    printf("\nIngrese Tema: ");
+				    fflush(stdin);
+				    fgets(general1.tema, 60, stdin);
+				    EliminarRetornoLinea(general1.tema);
+	
+				    printf("\nIngrese formato de del audio: ");
+				    fflush(stdin);
+				    fgets(general1.formato, 5, stdin);
+				    EliminarRetornoLinea(general1.formato);
+	
+				    printf("\nIngrese duracion del audio (hh:mm:ss): ");
+				    fflush(stdin);
+				    fgets(general1.duracion, 5, stdin);
+				    EliminarRetornoLinea(general1.duracion);
+					
+					/*FORMA CON FSEEK*/
+					fseek(archivo, 0, SEEK_END);
+   					fwrite(&general1, sizeof(general), 1, archivo);
+			    
+			    fclose(archivo);
+			    
+			    break;
+
+		case 5:	/*RECURSO VIDEO*/
+
+				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
+	
+				    //Ingresar datos 
+					strcpy(general1.tipo,"video");
+
+				    printf("\ningrese el Titulo: ");
+				    fflush(stdin);
+				    fgets(general1.titulo, 60, stdin);
+				    EliminarRetornoLinea(general1.titulo);
+				    
+				    printf("\nIngrese el Autor(es): ");
+				    fflush(stdin);
+				    fgets(general1.autors, 60, stdin);
+				    EliminarRetornoLinea(general1.autors);
+				    
+				    printf("\nIngrese Tema: ");
+				    fflush(stdin);
+				    fgets(general1.tema, 60, stdin);
+				    EliminarRetornoLinea(general1.tema);
+	
+				    printf("\nIngrese formato de del video: ");
+				    fflush(stdin);
+				    fgets(general1.formato, 5, stdin);
+				    EliminarRetornoLinea(general1.formato);
+	
+				    printf("\nIngrese duracion del audio (hh:mm:ss): ");
+				    fflush(stdin);
+				    fgets(general1.duracion, 5, stdin);
+				    EliminarRetornoLinea(general1.duracion);
+					
+					/*FORMA CON FSEEK*/
+					fseek(archivo, 0, SEEK_END);
+   					fwrite(&general1, sizeof(general), 1, archivo);
+			    
+			    fclose(archivo);
+			    
+			    break;
+
+		case 6:	/*RECURSO URI*/
+			    
+				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
+	
+				    //Ingresar datos
+					strcpy(general1.tipo,"uri");
+
+				    printf("\ningrese el Titulo: ");
+				    fflush(stdin);
+				    fgets(general1.titulo, 60, stdin);
+				    EliminarRetornoLinea(general1.titulo);
+				    
+				    printf("\nIngrese el Autor(es): ");
+				    fflush(stdin);
+				    fgets(general1.autors, 60, stdin);
+				    EliminarRetornoLinea(general1.autors);
+				    
+				    printf("\nIngrese Tema: ");
+				    fflush(stdin);
+				    fgets(general1.tema, 60, stdin);
+				    EliminarRetornoLinea(general1.tema);
+	
+				    printf("\nIngrese URI: ");
+				    fflush(stdin);
+				    fgets(general1.uri, 60, stdin);
+				    EliminarRetornoLinea(general1.uri);
+	
+				    printf("\nIngrese idioma del recurso: ");
+				    fflush(stdin);
+				    fgets(general1.idioma, 60, stdin);
+				    EliminarRetornoLinea(general1.idioma);
+	
+				    /*FORMA CON FSEEK*/
+					fseek(archivo, 0, SEEK_END);
+   					fwrite(&general1, sizeof(general), 1, archivo);
+			    
+			    fclose(archivo);
+			    
+			    break;
+	}   
+}
+
 
 
 /* MAIN */
 int main (void)
 {
-	int opc=-1, opc_busqueda=-1, opc_admin=-1, opc_config=-1, opc_config_tipos=-1, opc_config_metadatos=-1, opc_admin_agrear=-1;
+	int opc=-1, opc_busqueda=-1, opc_admin=-1, opc_config=-1, opc_config_tipos=-1, opc_config_metadatos=-1, opc_admin_agrear=-1, opc_admin_modificar=-1;
 	
 	do {
         system ("cls"); 
@@ -1768,7 +2120,7 @@ int main (void)
 					switch(opc_admin) 
 					{
 						case 1:
-								menu_admin_agregar:
+								menu_admin_modificar:
 								system ("cls"); 
         
 			        			menu_admon_recursos_agregar();
@@ -1780,37 +2132,37 @@ int main (void)
 									case 1:	// Crear recurso LIBRO
 											crear_recurso(opc_admin_agrear);
 											getch();
-											goto menu_admin_agregar;
+											goto menu_admin_modificar;
 											break;
 
 									case 2:	// Crear recurso MONOGRAFIA
 											crear_recurso(opc_admin_agrear);
 											getch();
-											goto menu_admin_agregar;
+											goto menu_admin_modificar;
 											break;
 
 									case 3:	// Crear recurso ARTICULO
 											crear_recurso(opc_admin_agrear);
 											getch();
-											goto menu_admin_agregar;
+											goto menu_admin_modificar;
 											break;
 
 									case 4:	// Crear recurso AUDIO
 											crear_recurso(opc_admin_agrear);
 											getch();
-											goto menu_admin_agregar;
+											goto menu_admin_modificar;
 											break;
 											
 									case 5:	// Crear recurso VIDEO
 											crear_recurso(opc_admin_agrear);
 											getch();
-											goto menu_admin_agregar;
+											goto menu_admin_modificar;
 											break;
 											
 									case 6:	// Crear recurso URI
 											crear_recurso(opc_admin_agrear);
 											getch();
-											goto menu_admin_agregar;
+											goto menu_admin_modificar;
 											break;
 												
 									case 0: 
@@ -1818,7 +2170,60 @@ int main (void)
 											break;
 								}
 			        						
-								break;
+						break;
+						
+						case 2:
+								menu_admin_modificarr:
+								system ("cls"); 
+        
+			        			menu_admon_recursos_modificar();
+								printf ("Ingrese la opcion seleccionada:  "); 
+			        			scanf ("%d",&opc_admin_modificar);
+
+			        			switch(opc_admin_modificar)
+								{
+									case 1:	// modificar recurso LIBRO
+											modificar_recurso(opc_admin_modificar);
+											getch();
+											goto menu_admin_modificar;
+											break;
+
+									case 2:	// modificar recurso MONOGRAFIA
+											modificar_recurso(opc_admin_modificar);
+											getch();
+											goto menu_admin_modificar;
+											break;
+
+									case 3:	// modificar recurso ARTICULO
+											modificar_recurso(opc_admin_modificar);
+											getch();
+											goto menu_admin_modificar;
+											break;
+
+									case 4:	// modificar recurso AUDIO
+											modificar_recurso(opc_admin_modificar);
+											getch();
+											goto menu_admin_modificar;
+											break;
+											
+									case 5:	// modificar recurso VIDEO
+											modificar_recurso(opc_admin_modificar);
+											getch();
+											goto menu_admin_modificar;
+											break;
+											
+									case 6:	// modificar recurso URI
+											modificar_recurso(opc_admin_modificar);
+											getch();
+											goto menu_admin_modificar;
+											break;
+												
+									case 0: 
+											goto menu_admin;
+											break;
+								}
+			        						
+						break;
 						
 					}
 					
@@ -1867,7 +2272,7 @@ int main (void)
 											goto menu_config;
 								}
         						
-								break;
+						break;
 								
 					}
 
