@@ -74,12 +74,15 @@ void buscar (int opcion);
 // Modificar RECURSO
 void modficar_recurso (int opcion);
 
+//Borrar RECURSO
+void borrar(void)
+
 
 /* =============================== FUNCIONES ================================ */
 void EliminarRetornoLinea(char *cad)
 {
    int i;
-   // la función fgets captura el retorno de línea, hay que eliminarlo:
+   // la función fgets captura el retorno de línea, para eliminarlo:
    for(i = strlen(cad)-1; i >= 0 && cad[i] < ' '; i--) cad[i] = 0;
 }
 
@@ -91,7 +94,6 @@ void opciones (void)
      printf ("		    MENU PRINCIPAL         	\n\n\n");
      printf (" 1.  Buscar recurso.					\n");
      printf (" 2.  Administrar Recursos.			\n");
-     printf (" 3.  Configuracion Biblioteca.		\n");
      printf (" 0.  Salir   						  \n\n");
 }
 
@@ -103,6 +105,7 @@ void menu_busqueda (void)
      printf (" 1.  Buscar por Autor.				\n");
      printf (" 2.  Buscar por Titulo.				\n");
      printf (" 3.  Buscar por tema.					\n");
+     printf (" 4.  Buscar por ISBN.					\n");
      printf (" 0.  Volver   					  \n\n");
 }
 
@@ -142,34 +145,6 @@ void menu_admon_recursos_modificar(void)
      printf (" 0.  Volver   					  \n\n");
 }
 
-// Menu Configuracion Biblioteca
-void menu_config (void)
-{
-     printf ("		     CONFIGURACION  		\n\n\n");
-     printf (" 1.  Administrar tipos.				\n");
-     printf (" 2.  Administrar Metadatos.			\n");
-     printf (" 0.  Volver   					  \n\n");
-}
-
-// Menu Configuracion Biblioteca - Administrar tipos
-void menu_config_tipos (void)
-{
-     printf ("	    CONFIGURACION RECURSOS 		\n\n\n");
-     printf (" 1.  Crear recurso.					\n");
-     printf (" 2.  Modificar recurso.				\n");
-     printf (" 3.  Borrar recurso.					\n");
-     printf (" 0.  Volver   					  \n\n");
-}
-
-// Menu Configuracion Biblioteca - Administrar Metadatos
-void menu_config_metadatos (void)
-{
-     printf ("	    CONFIGURACION METADATOS 	\n\n\n");
-     printf (" 1.  Crear metadatos.					\n");
-     printf (" 2.  Modificar metadatos.				\n");
-     printf (" 3.  Borrar metadatos.				\n");
-     printf (" 0.  Volver   					  \n\n");
-}
 
 
 /* ----------------------- FUNCIONES RECURSOS ----------------------- */
@@ -193,22 +168,9 @@ void crear_recurso (int opcion)
 	{	
 		case 1:	/*RECURSO LIBRO*/
 				
-				/*
-				char	ISBN[10];
-				char 	titulo[60];
-				char 	autors[60];
-				char 	tema[60];
-				char	anio_publicacion[4];
-			//para articulo
-				char	nombre_revista[60];
-				char	paginas[10];
-			// para audio y video
-				char	formato[5];
-				char	duracion[12];
-			//para uri
-				char	uri[200];
-				char	idioma[12];
-				*/
+				printf("\n =================================================");
+				printf("\n\t\t\tLIBRO");
+				printf("\n =================================================\n\n");
 				
 				//se abre el archivo
 				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
@@ -247,16 +209,27 @@ void crear_recurso (int opcion)
    					fwrite(&general1, sizeof(general), 1, archivo);
 					
 				fclose(archivo);
+				
+				printf("\n\n   Registro guardado.\n");
 			    
 			    break;
 			    
 		case 2:	/*RECURSO MONOGRAFIA*/
-
+				
+				printf("\n =================================================");
+				printf("\n\t\t      MONOGRAFIA");
+				printf("\n =================================================\n\n");
+				
 				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
 					
 					//Ingresar datos
 				    strcpy(general1.tipo,"monografia");
-
+					
+					printf("\nIngrese ISBN: ");
+				    fflush(stdin);
+				    fgets(general1.ISBN, 10, stdin);
+				    EliminarRetornoLinea(general1.ISBN);
+					
 				    printf("\ningrese el Titulo: ");
 				    fflush(stdin);
 				    fgets(general1.titulo, 60, stdin);
@@ -278,15 +251,26 @@ void crear_recurso (int opcion)
 				
 			    fclose(archivo);
 			    
+			    printf("\n\n   Registro guardado.\n");
+			    
 			    break;
 
 		case 3:	/*RECURSO ARTICULO*/
-
+				
+				printf("\n =================================================");
+				printf("\n\t\t       ARTICULO");
+				printf("\n =================================================\n\n");
+				
 				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
 	
 				    //Ingresar datos
 					strcpy(general1.tipo,"articulo");
-
+					
+					printf("\nIngrese ISBN: ");
+				    fflush(stdin);
+				    fgets(general1.ISBN, 10, stdin);
+				    EliminarRetornoLinea(general1.ISBN);
+				    
 				    printf("\ningrese el Titulo: ");
 				    fflush(stdin);
 				    fgets(general1.titulo, 60, stdin);
@@ -318,15 +302,26 @@ void crear_recurso (int opcion)
 
 			    fclose(archivo);
 			    
+			    printf("\n\n   Registro guardado.\n");
+			    
 			    break;
 
 		case 4:	/*RECURSO AUDIO*/
-
+				
+				printf("\n =================================================");
+				printf("\n\t\t\tAUDIO");
+				printf("\n =================================================\n\n");
+				
 				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
 	
 				    //Ingresar datos 
 					strcpy(general1.tipo,"audio");
-
+					
+					printf("\nIngrese ISBN: ");
+				    fflush(stdin);
+				    fgets(general1.ISBN, 10, stdin);
+				    EliminarRetornoLinea(general1.ISBN);
+				    
 				    printf("\ningrese el Titulo: ");
 				    fflush(stdin);
 				    fgets(general1.titulo, 60, stdin);
@@ -358,15 +353,26 @@ void crear_recurso (int opcion)
 			    
 			    fclose(archivo);
 			    
+			    printf("\n\n   Registro guardado.\n");
+			    
 			    break;
 
 		case 5:	/*RECURSO VIDEO*/
-
+				
+				printf("\n =================================================");
+				printf("\n\t\t\tVIDEO");
+				printf("\n =================================================\n\n");
+				
 				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
 	
 				    //Ingresar datos 
 					strcpy(general1.tipo,"video");
-
+					
+					printf("\nIngrese ISBN: ");
+				    fflush(stdin);
+				    fgets(general1.ISBN, 10, stdin);
+				    EliminarRetornoLinea(general1.ISBN);
+				    
 				    printf("\ningrese el Titulo: ");
 				    fflush(stdin);
 				    fgets(general1.titulo, 60, stdin);
@@ -398,15 +404,26 @@ void crear_recurso (int opcion)
 			    
 			    fclose(archivo);
 			    
+			    printf("\n\n   Registro guardado.\n");
+			    
 			    break;
 
 		case 6:	/*RECURSO URI*/
-			    
+				
+				printf("\n =================================================");
+				printf("\n\t\t\t URI");
+				printf("\n =================================================\n\n");
+				
 				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
 	
 				    //Ingresar datos
 					strcpy(general1.tipo,"uri");
-
+					
+					printf("\nIngrese ISBN: ");
+				    fflush(stdin);
+				    fgets(general1.ISBN, 10, stdin);
+				    EliminarRetornoLinea(general1.ISBN);
+				    
 				    printf("\ningrese el Titulo: ");
 				    fflush(stdin);
 				    fgets(general1.titulo, 60, stdin);
@@ -437,6 +454,8 @@ void crear_recurso (int opcion)
    					fwrite(&general1, sizeof(general), 1, archivo);
 			    
 			    fclose(archivo);
+			    
+			    printf("\n\n   Registro guardado.\n");
 			    
 			    break;
 	}   
@@ -523,7 +542,7 @@ void buscar (int opcion)
 						printf("\n =================================================");
 						printf("\n\t\t      MONOGRAFIAS");
 						printf("\n =================================================\n");
-						printf("\n  (Autor, Titulo, Tema.)");
+						printf("\n  (Autor, Isbn, Titulo, Tema.)");
 						printf("\n   ---------------------------------------------\n\n");
 									
 						//Cierro el archivo
@@ -578,6 +597,7 @@ void buscar (int opcion)
 								fseek(archivo, pos_busqueda, SEEK_CUR);
 								
 								printf("   %s, ",general1.autors);
+								printf("%s, ",general1.ISBN);
 								printf("%s, ",general1.titulo);
 								printf("%s.\n",general1.tema);
 								
@@ -592,7 +612,7 @@ void buscar (int opcion)
 						printf("\n =================================================");
 						printf("\n\t\t       ARTICULOS");
 						printf("\n =================================================\n");
-						printf("\n  (Autor, Titulo, Tema, Nombre revista, Paginas.)");
+						printf("\n  (Autor, Isbn, Titulo, Tema, Nombre revista, Paginas.)");
 						printf("\n   ---------------------------------------------\n\n");
 						
 						rewind(archivo);
@@ -647,6 +667,7 @@ void buscar (int opcion)
 								fseek(archivo, pos_busqueda, SEEK_CUR);
 								
 								printf("   %s, ",general1.autors);
+								printf("%s, ",general1.ISBN);
 								printf("%s, ",general1.titulo);
 								printf("%s, ",general1.tema);
 								printf("%s, ",general1.nombre_revista);
@@ -663,7 +684,7 @@ void buscar (int opcion)
 						printf("\n =================================================");
 						printf("\n\t\t\tAUDIOS");
 						printf("\n =================================================\n");
-						printf("\n  (Autor, Titulo, Tema, Formato, Duracion.)");
+						printf("\n  (Autor, Isbn, Titulo, Tema, Formato, Duracion.)");
 						printf("\n   ---------------------------------------\n\n");
 						
 						//Cierro el archivo
@@ -717,6 +738,7 @@ void buscar (int opcion)
 								fseek(archivo, pos_busqueda, SEEK_CUR);
 								
 								printf("   %s, ",general1.autors);
+								printf("%s, ",general1.ISBN);
 								printf("%s, ",general1.titulo);
 								printf("%s, ",general1.tema);
 								printf("%s, ",general1.formato);
@@ -733,7 +755,7 @@ void buscar (int opcion)
 						printf("\n =================================================");
 						printf("\n\t\t\tVIDEOS");
 						printf("\n =================================================\n");
-						printf("\n  (Autor, Titulo, Tema, Formato, Duracion.)");
+						printf("\n  (Autor, Isbn, Titulo, Tema, Formato, Duracion.)");
 						printf("\n   ---------------------------------------\n\n");
 						
 						//Cierro el archivo
@@ -786,6 +808,7 @@ void buscar (int opcion)
 								fseek(archivo, pos_busqueda, SEEK_CUR);
 								
 								printf("   %s, ",general1.autors);
+								printf("%s, ",general1.ISBN);
 								printf("%s, ",general1.titulo);
 								printf("%s, ",general1.tema);
 								printf("%s, ",general1.formato);
@@ -802,7 +825,7 @@ void buscar (int opcion)
 						printf("\n =================================================");
 						printf("\n\t\t\t URIS");
 						printf("\n =================================================\n");
-						printf("\n  (Autor, Titulo, Tema, Uri, Idioma.)");
+						printf("\n  (Autor, Isbn, Titulo, Tema, Uri, Idioma.)");
 						printf("\n   ---------------------------------\n\n");
 						
 						//Cierro el archivo
@@ -856,6 +879,7 @@ void buscar (int opcion)
 								fseek(archivo, pos_busqueda, SEEK_CUR);
 								
 								printf("   %s, ",general1.autors);
+								printf("%s, ",general1.ISBN);
 								printf("%s, ",general1.titulo);
 								printf("%s, ",general1.tema);
 								printf("%s, ",general1.uri);
@@ -940,7 +964,7 @@ void buscar (int opcion)
 						printf("\n =================================================");
 						printf("\n\t\t      MONOGRAFIAS");
 						printf("\n =================================================\n");
-						printf("\n  (Titulo, Autor, Tema.)");
+						printf("\n  (Titulo, Isbn, Autor, Tema.)");
 						printf("\n   ---------------------------------------------\n\n");
 									
 						//Cierro el archivo
@@ -995,6 +1019,7 @@ void buscar (int opcion)
 								fseek(archivo, pos_busqueda, SEEK_CUR);
 								
 								printf("   %s, ",general1.titulo);
+								printf("%s, ",general1.ISBN);
 								printf("%s, ",general1.autors);
 								printf("%s.\n",general1.tema);
 								
@@ -1009,7 +1034,7 @@ void buscar (int opcion)
 						printf("\n =================================================");
 						printf("\n\t\t       ARTICULOS");
 						printf("\n =================================================\n");
-						printf("\n  (Titulo, Autor, Tema, Nombre revista, Paginas.)");
+						printf("\n  (Titulo, Isbn, Autor, Tema, Nombre revista, Paginas.)");
 						printf("\n   ---------------------------------------------\n\n");
 						
 						rewind(archivo);
@@ -1064,6 +1089,7 @@ void buscar (int opcion)
 								fseek(archivo, pos_busqueda, SEEK_CUR);
 								
 								printf("   %s, ",general1.titulo);
+								printf("%s, ",general1.ISBN);
 								printf("%s, ",general1.autors);
 								printf("%s, ",general1.tema);
 								printf("%s, ",general1.nombre_revista);
@@ -1080,7 +1106,7 @@ void buscar (int opcion)
 						printf("\n =================================================");
 						printf("\n\t\t\tAUDIOS");
 						printf("\n =================================================\n");
-						printf("\n  (Titulo, Autor, Tema, Formato, Duracion.)");
+						printf("\n  (Titulo, Isbn, Autor, Tema, Formato, Duracion.)");
 						printf("\n   ---------------------------------------\n\n");
 						
 						//Cierro el archivo
@@ -1134,6 +1160,7 @@ void buscar (int opcion)
 								fseek(archivo, pos_busqueda, SEEK_CUR);
 								
 								printf("   %s, ",general1.titulo);
+								printf("%s, ",general1.ISBN);
 								printf("%s, ",general1.autors);
 								printf("%s, ",general1.tema);
 								printf("%s, ",general1.formato);
@@ -1150,7 +1177,7 @@ void buscar (int opcion)
 						printf("\n =================================================");
 						printf("\n\t\t\tVIDEOS");
 						printf("\n =================================================\n");
-						printf("\n  (Titulo, Autor, Tema, Formato, Duracion.)");
+						printf("\n  (Titulo, Isbn, Autor, Tema, Formato, Duracion.)");
 						printf("\n   ---------------------------------------\n\n");
 						
 						//Cierro el archivo
@@ -1205,6 +1232,7 @@ void buscar (int opcion)
 								fseek(archivo, pos_busqueda, SEEK_CUR);
 								
 								printf("   %s, ",general1.titulo);
+								printf("%s, ",general1.ISBN);
 								printf("%s, ",general1.autors);
 								printf("%s, ",general1.tema);
 								printf("%s, ",general1.formato);
@@ -1221,7 +1249,7 @@ void buscar (int opcion)
 						printf("\n =================================================");
 						printf("\n\t\t\t URIS");
 						printf("\n =================================================\n");
-						printf("\n  (Titulo, Autor, Tema, Uri, Idioma.)");
+						printf("\n  (Titulo, Isbn, Autor, Tema, Uri, Idioma.)");
 						printf("\n   ---------------------------------\n\n");
 						
 						//Cierro el archivo
@@ -1275,6 +1303,7 @@ void buscar (int opcion)
 								fseek(archivo, pos_busqueda, SEEK_CUR);
 								
 								printf("   %s, ",general1.titulo);
+								printf("%s, ",general1.ISBN);
 								printf("%s, ",general1.autors);
 								printf("%s, ",general1.tema);
 								printf("%s, ",general1.uri);
@@ -1359,7 +1388,7 @@ void buscar (int opcion)
 						printf("\n =================================================");
 						printf("\n\t\t      MONOGRAFIAS");
 						printf("\n =================================================\n");
-						printf("\n  (Tema, Autor, Titulo.)");
+						printf("\n  (Tema, Isbn, Autor, Titulo.)");
 						printf("\n   ---------------------------------------------\n\n");
 									
 						//Cierro el archivo
@@ -1414,6 +1443,7 @@ void buscar (int opcion)
 								fseek(archivo, pos_busqueda, SEEK_CUR);
 								
 								printf("   %s, ",general1.tema);
+								printf("%s, ",general1.ISBN);
 								printf("%s, ",general1.autors);
 								printf("%s.\n",general1.titulo);
 								
@@ -1427,7 +1457,7 @@ void buscar (int opcion)
 						printf("\n =================================================");
 						printf("\n\t\t       ARTICULOS");
 						printf("\n =================================================\n");
-						printf("\n  (Tema, Titulo, Autor, Nombre revista, Paginas.)");
+						printf("\n  (Tema, Isbn, Titulo, Autor, Nombre revista, Paginas.)");
 						printf("\n   ---------------------------------------------\n\n");
 						
 						rewind(archivo);
@@ -1482,6 +1512,7 @@ void buscar (int opcion)
 								fseek(archivo, pos_busqueda, SEEK_CUR);
 								
 								printf("   %s, ",general1.tema);
+								printf("%s, ",general1.ISBN);
 								printf("%s, ",general1.titulo);
 								printf("%s, ",general1.autors);
 								printf("%s, ",general1.nombre_revista);
@@ -1497,7 +1528,7 @@ void buscar (int opcion)
 						printf("\n =================================================");
 						printf("\n\t\t\tAUDIOS");
 						printf("\n =================================================\n");
-						printf("\n  (Tema, Titulo, Autor, Formato, Duracion.)");
+						printf("\n  (Tema, Isbn, Titulo, Autor, Formato, Duracion.)");
 						printf("\n   ---------------------------------------\n\n");
 						
 						//Cierro el archivo
@@ -1551,6 +1582,7 @@ void buscar (int opcion)
 								fseek(archivo, pos_busqueda, SEEK_CUR);
 								
 								printf("   %s, ",general1.tema);
+								printf("%s, ",general1.ISBN);
 								printf("%s, ",general1.titulo);
 								printf("%s, ",general1.autors);
 								printf("%s, ",general1.formato);
@@ -1566,7 +1598,7 @@ void buscar (int opcion)
 						printf("\n =================================================");
 						printf("\n\t\t\tVIDEOS");
 						printf("\n =================================================\n");
-						printf("\n  (Tema, Titulo, Autor, Formato, Duracion.)");
+						printf("\n  (Tema, Isbn, Titulo, Autor, Formato, Duracion.)");
 						printf("\n   ---------------------------------------\n\n");
 						
 						//Cierro el archivo
@@ -1619,6 +1651,7 @@ void buscar (int opcion)
 								fseek(archivo, pos_busqueda, SEEK_CUR);
 								
 								printf("   %s, ",general1.tema);
+								printf("%s, ",general1.ISBN);
 								printf("%s, ",general1.titulo);
 								printf("%s, ",general1.autors);
 								printf("%s, ",general1.formato);
@@ -1634,7 +1667,7 @@ void buscar (int opcion)
 						printf("\n =================================================");
 						printf("\n\t\t\t URIS");
 						printf("\n =================================================\n");
-						printf("\n  (Tema, Titulo, Autor, Uri, Idioma.)");
+						printf("\n  (Tema, Isbn, Titulo, Autor, Uri, Idioma.)");
 						printf("\n   ---------------------------------\n\n");
 						
 						//Cierro el archivo
@@ -1688,6 +1721,7 @@ void buscar (int opcion)
 								fseek(archivo, pos_busqueda, SEEK_CUR);
 								
 								printf("   %s, ",general1.tema);
+								printf("%s, ",general1.ISBN);
 								printf("%s, ",general1.titulo);
 								printf("%s, ",general1.autors);
 								printf("%s, ",general1.uri);
@@ -1701,6 +1735,428 @@ void buscar (int opcion)
 					if(found==0)
 					{			
 						printf("   No hay registros en URIS para este tema.\n");
+						fclose(archivo);				
+					}
+					
+					fclose(archivo);				
+		        
+		break;
+		
+		case 4:	/*BUSCAR POR ISBN*/
+
+				//Ingresar termino a buscar
+				printf("\n  ISBN a Buscar: ");
+				fflush(stdin);
+				gets(busq);
+				
+				
+				printf("\n =================================================");
+				printf("\n\t\t\tLIBROS");
+				printf("\n =================================================\n");
+				printf("\n  (Titulo, Isbn, Autor, Tema, Anio Publicacion.)");
+				printf("\n   --------------------------------------------\n\n");
+				
+				goto ISBN_libro;
+			
+			/*BUSCAR EN LIBROS POR ISBN*/
+			
+				ISBN_libro:
+					
+					pos_puntero=0;
+					pos_busqueda=0;
+					found=0;
+					
+					archivo= fopen(nombrearchivo, "rb");
+					//fseek(archivo, sizeof(general), SEEK_CUR);
+					
+					while (1)
+					{
+						fread(&general1,sizeof(general),1,archivo);
+						
+						if(feof(archivo))
+						{
+							break;
+						}
+						
+						if(strcmp(general1.tipo, "libro") == 0)
+						{
+							if(strcmp(general1.ISBN, busq) == 0)
+							{
+								pos_puntero = ftell(archivo);
+								pos_busqueda = pos_puntero - (sizeof(general1));
+								
+								fseek(archivo, pos_busqueda, SEEK_CUR);
+								
+								printf("   %s, ",general1.titulo);
+								printf("%s, ",general1.ISBN);
+								printf("%s, ",general1.autors);
+								printf("%s, ",general1.tema);
+								printf("%s.\n",general1.anio_publicacion);
+								
+								found++;
+						
+							}
+						}
+					}
+					
+					if(found!=0)
+					{			
+						printf("\n =================================================");
+						printf("\n\t\t      MONOGRAFIAS");
+						printf("\n =================================================\n");
+						printf("\n  (Titulo, Isbn, Autor, Tema.)");
+						printf("\n   ---------------------------------------------\n\n");
+									
+						//Cierro el archivo
+						fclose(archivo);
+									
+						rewind(archivo);
+									
+					    goto ISBN_monografia;				
+					}
+					
+					else
+					{
+						printf("   No hay registros en LIBROS para este titulo.\n");
+									
+						//Cierro el archivo
+						fclose(archivo);
+									
+					    goto ISBN_monografia;
+					}
+
+
+			/*BUSCAR EN MONOGRAFIA POR ISBN*/
+
+		        ISBN_monografia:
+		        	
+		        	pos_puntero=0;
+					pos_busqueda=0;
+					found=0;
+					
+					//abrimos el archivo
+					archivo= fopen(nombrearchivo, "rb");
+					
+					// coloca el puntero en la primera posicion del archivo
+					rewind(archivo);
+					
+					while (1)
+					{
+						fread(&general1,sizeof(general),1,archivo);
+						
+						if(feof(archivo))
+						{
+							break;
+						}
+						
+						if(strcmp(general1.tipo, "monografia") == 0)
+						{
+							if(strcmp(general1.ISBN, busq) == 0)
+							{
+								pos_puntero = ftell(archivo);
+								pos_busqueda = pos_puntero - (sizeof(general1));
+								
+								fseek(archivo, pos_busqueda, SEEK_CUR);
+								
+								printf("   %s, ",general1.titulo);
+								printf("%s, ",general1.ISBN);
+								printf("%s, ",general1.autors);
+								printf("%s.\n",general1.tema);
+								
+								found++;
+						
+							}
+						}
+					}
+					
+					if(found!=0)
+					{			
+						printf("\n =================================================");
+						printf("\n\t\t       ARTICULOS");
+						printf("\n =================================================\n");
+						printf("\n  (Titulo, Isbn, Autor, Tema, Nombre revista, Paginas.)");
+						printf("\n   ---------------------------------------------\n\n");
+						
+						rewind(archivo);
+						//Cierro el archivo
+						fclose(archivo);
+						
+		        		goto ISBN_articulo;				
+					}
+					
+					else
+					{
+						printf("   No hay registros en MONOGRAFIAS para este titulo.\n");
+									
+						//Cierro el archivo
+						fclose(archivo);
+									
+					    goto ISBN_articulo;
+					}
+		        	
+		        	
+
+			/*BUSCAR EN ARTICULO POR ISBN*/
+
+		        ISBN_articulo:
+		        	
+		        	pos_puntero=0;
+					pos_busqueda=0;
+					found=0;
+					
+					//abrimos el archivo
+					archivo= fopen(nombrearchivo, "rb");
+					
+					// coloca el puntero en la primera posicion del archivo
+					rewind(archivo);
+					
+					while (1)
+					{
+						fread(&general1,sizeof(general),1,archivo);
+						
+						if(feof(archivo))
+						{
+							break;
+						}
+						
+						if(strcmp(general1.tipo, "articulo") == 0)
+						{
+							if(strcmp(general1.ISBN, busq) == 0)
+							{
+								pos_puntero = ftell(archivo);
+								pos_busqueda = pos_puntero - (sizeof(general1));
+								
+								fseek(archivo, pos_busqueda, SEEK_CUR);
+								
+								printf("   %s, ",general1.titulo);
+								printf("%s, ",general1.ISBN);
+								printf("%s, ",general1.autors);
+								printf("%s, ",general1.tema);
+								printf("%s, ",general1.nombre_revista);
+								printf("%s\n",general1.paginas);
+								
+								found++;
+						
+							}
+						}
+					}
+					
+					if(found!=0)
+					{			
+						printf("\n =================================================");
+						printf("\n\t\t\tAUDIOS");
+						printf("\n =================================================\n");
+						printf("\n  (Titulo, Isbn, Autor, Tema, Formato, Duracion.)");
+						printf("\n   ---------------------------------------\n\n");
+						
+						//Cierro el archivo
+						fclose(archivo);
+						
+		        		goto ISBN_audio;				
+					}
+					
+					else
+					{
+						printf("   No hay registros en ARTICULOS para este titulo.\n");
+									
+						//Cierro el archivo
+						fclose(archivo);
+									
+					    goto ISBN_audio;
+					}
+		        	
+
+
+			/*BUSCAR EN AUDIO POR ISBN*/
+
+		        ISBN_audio:
+		        	
+		        	pos_puntero=0;
+					pos_busqueda=0;
+					found=0;
+					
+					//abrimos el archivo
+					archivo= fopen(nombrearchivo, "rb");
+					
+					// coloca el puntero en la primera posicion del archivo
+					rewind(archivo);
+					
+					while (1)
+					{
+						fread(&general1,sizeof(general),1,archivo);
+						
+						if(feof(archivo))
+						{
+							break;
+						}
+						
+						if(strcmp(general1.tipo, "audio") == 0)
+						{
+							if(strcmp(general1.ISBN, busq) == 0)
+							{
+								pos_puntero = ftell(archivo);
+								pos_busqueda = pos_puntero - (sizeof(general1));
+								
+								fseek(archivo, pos_busqueda, SEEK_CUR);
+								
+								printf("   %s, ",general1.titulo);
+								printf("%s, ",general1.ISBN);
+								printf("%s, ",general1.autors);
+								printf("%s, ",general1.tema);
+								printf("%s, ",general1.formato);
+								printf("%s\n",general1.duracion);
+								
+								found++;
+						
+							}
+						}
+					}
+					
+					if(found!=0)
+					{			
+						printf("\n =================================================");
+						printf("\n\t\t\tVIDEOS");
+						printf("\n =================================================\n");
+						printf("\n  (Titulo, Isbn, Autor, Tema, Formato, Duracion.)");
+						printf("\n   ---------------------------------------\n\n");
+						
+						//Cierro el archivo
+						fclose(archivo);
+						
+		        		goto ISBN_video;				
+					}
+					
+					else
+					{
+					printf("   No hay registros en AUDIOS para este titulo.\n");	
+									
+						//Cierro el archivo
+						fclose(archivo);
+									
+					    goto ISBN_video;
+					}
+		        	
+
+
+			/*BUSCAR EN VIDEO POR ISBN*/
+
+		        ISBN_video:
+		        	
+		        	pos_puntero=0;
+					pos_busqueda=0;
+					found=0;
+					
+					//abrimos el archivo
+					archivo= fopen(nombrearchivo, "rb");
+					
+					// coloca el puntero en la primera posicion del archivo
+					rewind(archivo);
+					
+					while (1)
+					{
+						fread(&general1,sizeof(general),1,archivo);
+						
+						if(feof(archivo))
+						{
+							break;
+						}
+						
+						if(strcmp(general1.tipo, "video") == 0)
+						{
+							if(strcmp(general1.ISBN, busq) == 0)
+							{
+								pos_puntero = ftell(archivo);
+								pos_busqueda = pos_puntero - (sizeof(general1));
+								
+								fseek(archivo, pos_busqueda, SEEK_CUR);
+								
+								printf("   %s, ",general1.titulo);
+								printf("%s, ",general1.ISBN);
+								printf("%s, ",general1.autors);
+								printf("%s, ",general1.tema);
+								printf("%s, ",general1.formato);
+								printf("%s\n",general1.duracion);
+								
+								found++;
+						
+							}
+						}
+					}
+					
+					if(found!=0)
+					{			
+						printf("\n =================================================");
+						printf("\n\t\t\t URIS");
+						printf("\n =================================================\n");
+						printf("\n  (Titulo, Isbn, Autor, Tema, Uri, Idioma.)");
+						printf("\n   ---------------------------------\n\n");
+						
+						//Cierro el archivo
+						fclose(archivo);
+						
+		        		goto ISBN_uri;				
+					}
+					
+					else
+					{
+						printf("   No hay registros en VIDEOS para este titulo.\n");
+									
+						//Cierro el archivo
+						fclose(archivo);
+									
+					    goto ISBN_uri;
+					}
+		        	
+					
+
+			/*BUSCAR EN URI POR ISBN*/
+
+		        ISBN_uri:
+		        	
+		        	pos_puntero=0;
+					pos_busqueda=0;
+					found=0;
+					
+					//abrimos el archivo
+					archivo= fopen(nombrearchivo, "rb");
+					
+					// coloca el puntero en la primera posicion del archivo
+					rewind(archivo);
+					
+					while (1)
+					{
+						fread(&general1,sizeof(general),1,archivo);
+						
+						if(feof(archivo))
+						{
+							break;
+						}
+						
+						if(strcmp(general1.tipo, "uri") == 0)
+						{
+							if(strcmp(general1.ISBN, busq) == 0)
+							{
+								pos_puntero = ftell(archivo);
+								pos_busqueda = pos_puntero - (sizeof(general1));
+								
+								fseek(archivo, pos_busqueda, SEEK_CUR);
+								
+								printf("   %s, ",general1.titulo);
+								printf("%s, ",general1.ISBN);
+								printf("%s, ",general1.autors);
+								printf("%s, ",general1.tema);
+								printf("%s, ",general1.uri);
+								printf("%s\n",general1.idioma);
+								
+								found++;
+						
+							}
+						}
+					}
+					
+					if(found==0)
+					{			
+						printf("   No hay registros en URIS para este titulo.\n");
 						fclose(archivo);				
 					}
 					
@@ -1742,7 +2198,7 @@ void modificar_recurso (int opcion)
 				
 				
 				printf("\n =================================================");
-				printf("\n\t\t\tLIBROS");
+				printf("\n\t\t\tLIBRO");
 				printf("\n =================================================\n");
 				printf("\n  (Autor, Isbn, Titulo, Tema, Anio Publicacion.)");
 				printf("\n   --------------------------------------------\n\n");
@@ -1858,33 +2314,124 @@ void modificar_recurso (int opcion)
 			    
 		case 2:	/*RECURSO MONOGRAFIA*/
 
-				archivo= fopen(nombrearchivo, "ab"); //abro el archivo
-					
-					//Ingresar datos
-				    strcpy(general1.tipo,"monografia");
-
-				    printf("\ningrese el Titulo: ");
-				    fflush(stdin);
-				    fgets(general1.titulo, 60, stdin);
-				    EliminarRetornoLinea(general1.titulo);
-				    
-				    printf("\nIngrese el Autor(es): ");
-				    fflush(stdin);
-				    fgets(general1.autors, 60, stdin);
-				    EliminarRetornoLinea(general1.autors);
-				    
-				    printf("\nIngrese Tema: ");
-				    fflush(stdin);
-				    fgets(general1.tema, 60, stdin);
-				    EliminarRetornoLinea(general1.tema);
-					
-					/*FORMA CON FSEEK*/
-					fseek(archivo, 0, SEEK_END);
-   					fwrite(&general1, sizeof(general), 1, archivo);
+				pos_puntero=0;
+				pos_busqueda=0;
+				found=0;
 				
-			    fclose(archivo);
+				//Ingresar termino a buscar
+				printf("\n  ISBN a Modificar: ");
+				fflush(stdin);
+				gets(busq);
+				
+				
+				printf("\n =================================================");
+				printf("\n\t\t      MONOGRAFIAS");
+				printf("\n =================================================\n");
+				printf("\n  (Autor, Titulo, Tema.)");
+				printf("\n   ---------------------------------------------\n\n");
+					
+				//abrimos el archivo a modificar
+				archivo= fopen(nombrearchivo, "rb+");
+				
+				//abrimos el archivo temporal
+				temp= fopen(nombretemp, "rb+");
+				
+				// si el fichero no existe, lo crea.
+				if(!temp)
+			   	{
+			   		temp = fopen(nombretemp, "w+b");
+			   	}
+					
+				// coloca el puntero en la primera posicion del archivo
+				rewind(archivo);
+					
+				while (1)
+				{
+					fread(&general1,sizeof(general),1,archivo);
+					
+					if(feof(archivo))
+					{
+						break;
+					}
+					
+					if(strcmp(general1.ISBN, busq) == 0)
+					{
+						pos_puntero = ftell(archivo);
+						pos_busqueda = pos_puntero - (sizeof(general1));
+						
+						fseek(archivo, pos_busqueda, SEEK_CUR);
+						
+					// imprimir
+						printf("   %s, ",general1.autors);
+						printf("%s, ",general1.titulo);
+						printf("%s.\n",general1.tema);
+						
+					//Ingresar nuevos datos
+					    strcpy(general1.tipo,"libro");
+					    
+					    strcpy(general1.tipo,"monografia");
+
+					    printf("\ningrese el Titulo: ");
+					    fflush(stdin);
+					    fgets(general1.titulo, 60, stdin);
+					    EliminarRetornoLinea(general1.titulo);
+					    
+					    printf("\nIngrese el Autor(es): ");
+					    fflush(stdin);
+					    fgets(general1.autors, 60, stdin);
+					    EliminarRetornoLinea(general1.autors);
+					    
+					    printf("\nIngrese Tema: ");
+					    fflush(stdin);
+					    fgets(general1.tema, 60, stdin);
+					    EliminarRetornoLinea(general1.tema);
+						
+						/*FORMA CON FSEEK*/
+						fseek(archivo, 0, SEEK_END);
+	   					fwrite(&general1, sizeof(general), 1, archivo);
+	
+						
+						/*FORMA CON FSEEK*/
+						fseek(archivo, 0, SEEK_END);
+	   					fwrite(&general1, sizeof(general), 1, temp);
+						
+						found++;
+					}
+				}
+				
+				fclose(archivo);
+				fclose(temp);
+					
+				if(found==0)
+				{			
+					printf("   No hay registros en LIBROS para este ISBN.\n");
+					fclose(archivo);				
+				}
+				else
+				{
+					//abrimos el archivo a modificar
+					archivo= fopen(nombrearchivo, "wb+");
+				
+					//abrimos el archivo temporal
+					temp= fopen(nombretemp, "rb+");
+					
+					while(1)
+					{
+						fread(&general1,sizeof(general),1,temp);
+					
+						if(feof(temp))
+						{
+							break;
+						}
+						fseek(archivo, 0, SEEK_END);
+   						fwrite(&general1, sizeof(general), 1, archivo);
+					}
+				}
+					
+				fclose(archivo);
+				fclose(temp);
 			    
-			    break;
+			break;
 
 		case 3:	/*RECURSO ARTICULO*/
 
@@ -2049,11 +2596,113 @@ void modificar_recurso (int opcion)
 }
 
 
+// Borrar recurso
+void borrar(void)
+{
+	int pos_puntero=0, pos_busqueda=0, found=0;
+
+	char busq[60];
+	
+	//Ingresar termino a buscar
+	printf("\n  ISBN a BORRAR: ");
+	fflush(stdin);
+	gets(busq);
+	
+	//abrimos el archivo a modificar
+	archivo= fopen(nombrearchivo, "rb+");
+				
+	//abrimos el archivo temporal
+	temp= fopen(nombretemp, "rb+");
+				
+	// si el fichero no existe, lo crea.
+	if(!temp)
+	{
+		temp = fopen(nombretemp, "w+b");
+	}
+					
+	// coloca el puntero en la primera posicion del archivo
+	rewind(archivo);
+		
+	while (1)
+	{
+		fread(&general1,sizeof(general),1,archivo);
+		
+		if(feof(archivo))
+		{
+			break;
+		}
+		
+		if(strcmp(general1.ISBN, busq) == 0)
+		{
+			pos_puntero = ftell(archivo);
+			pos_busqueda = pos_puntero - (sizeof(general1));
+			
+			fseek(archivo, pos_busqueda, SEEK_CUR);
+			
+		//Ingresar nuevos datos
+			strcpy(general1.tipo," ");
+			strcpy(general1.ISBN," ");
+			strcpy(general1.titulo," ");
+			strcpy(general1.autors," ");
+			strcpy(general1.tema," ");
+			strcpy(general1.anio_publicacion," ");
+			strcpy(general1.nombre_revista," ");
+			strcpy(general1.paginas," ");
+			strcpy(general1.formato," ");
+			strcpy(general1.duracion," ");
+			strcpy(general1.uri," ");
+			strcpy(general1.idioma," ");
+		
+						
+			/*FORMA CON FSEEK*/
+			fseek(archivo, 0, SEEK_END);
+	   		fwrite(&general1, sizeof(general), 1, temp);
+						
+			found++;
+		}
+	}
+				
+	fclose(archivo);
+	fclose(temp);
+					
+	if(found==0)
+	{			
+		printf("   No hay registros en LIBROS para este ISBN.\n");
+		fclose(archivo);				
+	}
+	else
+	{
+		//abrimos el archivo a modificar
+		archivo= fopen(nombrearchivo, "wb+");
+				
+		//abrimos el archivo temporal
+		temp= fopen(nombretemp, "rb+");
+			
+		while(1)
+		{
+			fread(&general1,sizeof(general),1,temp);
+		
+			if(feof(temp))
+			{
+				break;
+			}
+			fseek(archivo, 0, SEEK_END);
+   			fwrite(&general1, sizeof(general), 1, archivo);
+		}
+		
+		printf("   Registro Borrado.\n");
+	}
+					
+	fclose(archivo);
+	fclose(temp);
+}
+
+
 
 /* MAIN */
 int main (void)
 {
-	int opc=-1, opc_busqueda=-1, opc_admin=-1, opc_config=-1, opc_config_tipos=-1, opc_config_metadatos=-1, opc_admin_agrear=-1, opc_admin_modificar=-1;
+	int opc=-1, opc_busqueda=-1, opc_admin=-1, opc_config=-1, opc_config_tipos=-1, opc_config_metadatos=-1, opc_admin_agrear=-1, opc_admin_modificar=-1, opc_borrar=-1;
 	
 	do {
         system ("cls"); 
@@ -2076,12 +2725,7 @@ int main (void)
 					//Menu Busqueda
 					switch(opc_busqueda) 
 					{
-							/*
-								1.  Buscar por Autor.				\n");
- 								2.  Buscar por Titulo.				\n");
-								3.  Buscar por tema.
-							*/
-							
+												
 							case 1:	// buscar por AUTOR
 									buscar(opc_busqueda);
 									getch();
@@ -2095,6 +2739,12 @@ int main (void)
 									break;
 									
 							case 3:	// buscar por TEMA
+									buscar(opc_busqueda);
+									getch();
+									goto menu_busqueda;
+									break;
+									
+							case 4:	// buscar por TEMA
 									buscar(opc_busqueda);
 									getch();
 									goto menu_busqueda;
@@ -2120,7 +2770,7 @@ int main (void)
 					switch(opc_admin) 
 					{
 						case 1:
-								menu_admin_modificar:
+								menu_admin_agregar:
 								system ("cls"); 
         
 			        			menu_admon_recursos_agregar();
@@ -2132,37 +2782,37 @@ int main (void)
 									case 1:	// Crear recurso LIBRO
 											crear_recurso(opc_admin_agrear);
 											getch();
-											goto menu_admin_modificar;
+											goto menu_admin_agregar;
 											break;
 
 									case 2:	// Crear recurso MONOGRAFIA
 											crear_recurso(opc_admin_agrear);
 											getch();
-											goto menu_admin_modificar;
+											goto menu_admin_agregar;
 											break;
 
 									case 3:	// Crear recurso ARTICULO
 											crear_recurso(opc_admin_agrear);
 											getch();
-											goto menu_admin_modificar;
+											goto menu_admin_agregar;
 											break;
 
 									case 4:	// Crear recurso AUDIO
 											crear_recurso(opc_admin_agrear);
 											getch();
-											goto menu_admin_modificar;
+											goto menu_admin_agregar;
 											break;
 											
 									case 5:	// Crear recurso VIDEO
 											crear_recurso(opc_admin_agrear);
 											getch();
-											goto menu_admin_modificar;
+											goto menu_admin_agregar;
 											break;
 											
 									case 6:	// Crear recurso URI
 											crear_recurso(opc_admin_agrear);
 											getch();
-											goto menu_admin_modificar;
+											goto menu_admin_agregar;
 											break;
 												
 									case 0: 
@@ -2173,7 +2823,7 @@ int main (void)
 						break;
 						
 						case 2:
-								menu_admin_modificarr:
+								menu_admin_modificar:
 								system ("cls"); 
         
 			        			menu_admon_recursos_modificar();
@@ -2225,58 +2875,17 @@ int main (void)
 			        						
 						break;
 						
-					}
-					
-			break;
-					
-			case 3:
-					
-					menu_config:
-					system ("cls"); 
-        
-        			menu_config();
-					printf ("Ingrese la opcion seleccionada:  "); 
-        			scanf ("%d",&opc_config);
-				
-					//Menu Configuracion Biblioteca
-					switch(opc_config) 
-					{
-						case 1:
-								system ("cls");
-								
-								menu_config_tipos();
-								
-								printf ("Ingrese la opcion seleccionada:  "); 
-        						scanf ("%d",&opc_config_tipos);
-        						
-        						switch(opc_config_tipos)
-								{
-									case 0: 
-											goto menu_config;
-											break;
-								}
-        						
-								break;
-								
-						case 2:
-								system ("cls");
-								
-								menu_config_metadatos();
-								
-								printf ("Ingrese la opcion seleccionada:  "); 
-        						scanf ("%d",&opc_config_metadatos);
-        						
-        						switch(opc_config_metadatos)
-								{
-									case 0: 
-											goto menu_config;
-								}
-        						
-						break;
-								
-					}
+						case 3:
 
+			        			borrar();
+			        			goto menu_admin;
+			        						
+						break;
+						
+					}
+					
 			break;
+					
 						
 			defalut:
 					printf("Ha ingresado un numero no valido\n");
