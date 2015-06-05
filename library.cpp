@@ -455,7 +455,7 @@ void buscar (int opcion)
 				
 				goto autor_libro;
 			
-					    /*BUSCAR EN LIBROS POR AUTOR*/
+			/*BUSCAR EN LIBROS POR AUTOR*/
 			
 				autor_libro:
 					
@@ -728,9 +728,7 @@ void buscar (int opcion)
 						fclose(archivo);
 									
 					    goto autor_video;
-					}
-		        	/*---------------------------------------------------------------------------------*/
-		        	
+					}		        	
 
 
 			/*BUSCAR EN VIDEO POR AUTOR*/
@@ -851,17 +849,15 @@ void buscar (int opcion)
 					{			
 						printf("   No hay registros en URIS para este autor.\n");
 						fclose(archivo);				
-					}				
+					}
+					
+					fclose(archivo);				
 		        
 		break;
 
 
 		case 2:	/*BUSCAR POR TITULO*/
-				
-				int pos_puntero, pos_busqueda;
-				char busq[20];
-				
-				
+
 				//Ingresar termino a buscar
 				printf("\n  Titulo a Buscar: ");
 				fflush(stdin);
@@ -879,25 +875,6 @@ void buscar (int opcion)
 			/*BUSCAR EN LIBROS POR TITULO*/
 			
 				titulo_libro:
-
-				/*
-					char	ISBN[10];
-					char 	titulo[60];
-					char 	autors[60];
-					char 	tema[60];
-					char	anio_publicacion[4];
-				//para articulo
-					char	nombre_revista[60];
-					char	paginas[10];
-				// para audio y video
-					char	formato[5];
-					char	duracion[12];
-				//para uri
-					char	uri[200];
-					char	idioma[12];
-				*/
-
-
 					
 					pos_puntero=0;
 					pos_busqueda=0;
@@ -915,9 +892,9 @@ void buscar (int opcion)
 							break;
 						}
 						
-						if(strcmp(general1.titulo, "libro") == 0)
+						if(strcmp(general1.tipo, "libro") == 0)
 						{
-							if(strcmp(general1.autors, busq) == 0)
+							if(strcmp(general1.titulo, busq) == 0)
 							{
 								pos_puntero = ftell(archivo);
 								pos_busqueda = pos_puntero - (sizeof(general1));
@@ -986,9 +963,9 @@ void buscar (int opcion)
 							break;
 						}
 						
-						if(strcmp(general1.titulo, "monografia") == 0)
+						if(strcmp(general1.tipo, "monografia") == 0)
 						{
-							if(strcmp(general1.autors, busq) == 0)
+							if(strcmp(general1.titulo, busq) == 0)
 							{
 								pos_puntero = ftell(archivo);
 								pos_busqueda = pos_puntero - (sizeof(general1));
@@ -1055,9 +1032,9 @@ void buscar (int opcion)
 							break;
 						}
 						
-						if(strcmp(general1.titulo, "articulo") == 0)
+						if(strcmp(general1.tipo, "articulo") == 0)
 						{
-							if(strcmp(general1.autors, busq) == 0)
+							if(strcmp(general1.titulo, busq) == 0)
 							{
 								pos_puntero = ftell(archivo);
 								pos_busqueda = pos_puntero - (sizeof(general1));
@@ -1125,9 +1102,9 @@ void buscar (int opcion)
 							break;
 						}
 						
-						if(strcmp(general1.titulo, "audio") == 0)
+						if(strcmp(general1.tipo, "audio") == 0)
 						{
-							if(strcmp(general1.autors, busq) == 0)
+							if(strcmp(general1.titulo, busq) == 0)
 							{
 								pos_puntero = ftell(archivo);
 								pos_busqueda = pos_puntero - (sizeof(general1));
@@ -1196,9 +1173,9 @@ void buscar (int opcion)
 							break;
 						}
 						
-						if(strcmp(general1.titulo, "video") == 0)
+						if(strcmp(general1.tipo, "video") == 0)
 						{
-							if(strcmp(general1.autors, busq) == 0)
+							if(strcmp(general1.titulo, busq) == 0)
 							{
 								pos_puntero = ftell(archivo);
 								pos_busqueda = pos_puntero - (sizeof(general1));
@@ -1240,7 +1217,6 @@ void buscar (int opcion)
 									
 					    goto titulo_uri;
 					}
-		        	/*---------------------------------------------------------------------------------*/
 		        	
 					
 
@@ -1267,9 +1243,9 @@ void buscar (int opcion)
 							break;
 						}
 						
-						if(strcmp(general1.titulo, "uri") == 0)
+						if(strcmp(general1.tipo, "uri") == 0)
 						{
-							if(strcmp(general1.autors, busq) == 0)
+							if(strcmp(general1.titulo, busq) == 0)
 							{
 								pos_puntero = ftell(archivo);
 								pos_busqueda = pos_puntero - (sizeof(general1));
@@ -1292,17 +1268,428 @@ void buscar (int opcion)
 					{			
 						printf("   No hay registros en URIS para este titulo.\n");
 						fclose(archivo);				
-					}				
-		        
-		break;
+					}
+					
+					fclose(archivo);				
 		        
 		break;
 
 		case 3:	/*BUSCAR POR TEMA*/
 
+		      //Ingresar termino a buscar
+				printf("\n  Tema a Buscar: ");
+				fflush(stdin);
+				gets(busq);
+				
+				
+				printf("\n =================================================");
+				printf("\n\t\t\tLIBROS");
+				printf("\n =================================================\n");
+				printf("\n  (Tema, Isbn, Titulo, Autor, Anio Publicacion.)");
+				printf("\n   --------------------------------------------\n\n");
+				
+				goto tema_libro;
+
+			
+			/*BUSCAR EN LIBROS POR TEMA*/
+			
+				tema_libro:
+					
+					pos_puntero=0;
+					pos_busqueda=0;
+					found=0;
+					
+					archivo= fopen(nombrearchivo, "rb");
+					//fseek(archivo, sizeof(general), SEEK_CUR);
+					
+					while (1)
+					{
+						fread(&general1,sizeof(general),1,archivo);
+						
+						if(feof(archivo))
+						{
+							break;
+						}
+						
+						if(strcmp(general1.tipo, "libro") == 0)
+						{
+							if(strcmp(general1.tema, busq) == 0)
+							{
+								pos_puntero = ftell(archivo);
+								pos_busqueda = pos_puntero - (sizeof(general1));
+								
+								fseek(archivo, pos_busqueda, SEEK_CUR);
+								
+								printf("   %s, ",general1.tema);
+								printf("%d, ",general1.ISBN);
+								printf("%s, ",general1.titulo);
+								printf("%s, ",general1.autors);
+								printf("%d.\n",general1.anio_publicacion);
+								
+								found++;
+							}
+						
+						}
+					}
+					
+					if(found!=0)
+					{			
+						printf("\n =================================================");
+						printf("\n\t\t      MONOGRAFIAS");
+						printf("\n =================================================\n");
+						printf("\n  (Tema, Autor, Titulo.)");
+						printf("\n   ---------------------------------------------\n\n");
+									
+						//Cierro el archivo
+						fclose(archivo);
+									
+						rewind(archivo);
+									
+					    goto tema_monografia;				
+					}
+					
+					else
+					{
+						printf("   No hay registros en LIBROS para este tema.\n");
+									
+						//Cierro el archivo
+						fclose(archivo);
+									
+					    goto tema_monografia;
+					}
+
+
+			/*BUSCAR EN MONOGRAFIA POR TEMA*/
+
+		        tema_monografia:
+		        	
+		        	pos_puntero=0;
+					pos_busqueda=0;
+					found=0;
+					
+					//abrimos el archivo
+					archivo= fopen(nombrearchivo, "rb");
+					
+					// coloca el puntero en la primera posicion del archivo
+					rewind(archivo);
+					
+					while (1)
+					{
+						fread(&general1,sizeof(general),1,archivo);
+						
+						if(feof(archivo))
+						{
+							break;
+						}
+						
+						if(strcmp(general1.tipo, "monografia") == 0)
+						{
+							if(strcmp(general1.tema, busq) == 0)
+							{
+								pos_puntero = ftell(archivo);
+								pos_busqueda = pos_puntero - (sizeof(general1));
+								
+								fseek(archivo, pos_busqueda, SEEK_CUR);
+								
+								printf("   %s, ",general1.tema);
+								printf("%s, ",general1.autors);
+								printf("%s.\n",general1.titulo);
+								
+								found++;
+							}
+						}
+					}
+					
+					if(found!=0)
+					{			
+						printf("\n =================================================");
+						printf("\n\t\t       ARTICULOS");
+						printf("\n =================================================\n");
+						printf("\n  (Tema, Titulo, Autor, Nombre revista, Paginas.)");
+						printf("\n   ---------------------------------------------\n\n");
+						
+						rewind(archivo);
+						//Cierro el archivo
+						fclose(archivo);
+						
+		        		goto tema_articulo;				
+					}
+					
+					else
+					{
+						printf("   No hay registros en MONOGRAFIAS para este tema.\n");
+									
+						//Cierro el archivo
+						fclose(archivo);
+									
+					    goto tema_articulo;
+					}
+		        	
+		        	
+
+			/*BUSCAR EN ARTICULO POR TEMA*/
+
+		        tema_articulo:
+
+		        	pos_puntero=0;
+					pos_busqueda=0;
+					found=0;
+					
+					//abrimos el archivo
+					archivo= fopen(nombrearchivo, "rb");
+					
+					// coloca el puntero en la primera posicion del archivo
+					rewind(archivo);
+					
+					while (1)
+					{
+						fread(&general1,sizeof(general),1,archivo);
+						
+						if(feof(archivo))
+						{
+							break;
+						}
+						
+						if(strcmp(general1.tipo, "articulo") == 0)
+						{
+							if(strcmp(general1.tema, busq) == 0)
+							{
+								pos_puntero = ftell(archivo);
+								pos_busqueda = pos_puntero - (sizeof(general1));
+								
+								fseek(archivo, pos_busqueda, SEEK_CUR);
+								
+								printf("   %s, ",general1.tema);
+								printf("%s, ",general1.titulo);
+								printf("%s, ",general1.autors);
+								printf("%s, ",general1.nombre_revista);
+								printf("%s\n",general1.paginas);
+								
+								found++;
+							}
+						}
+					}
+					
+					if(found!=0)
+					{			
+						printf("\n =================================================");
+						printf("\n\t\t\tAUDIOS");
+						printf("\n =================================================\n");
+						printf("\n  (Tema, Titulo, Autor, Formato, Duracion.)");
+						printf("\n   ---------------------------------------\n\n");
+						
+						//Cierro el archivo
+						fclose(archivo);
+						
+		        		goto tema_audio;				
+					}
+					
+					else
+					{
+						printf("   No hay registros en ARTICULOS para este tema.\n");
+									
+						//Cierro el archivo
+						fclose(archivo);
+									
+					    goto tema_audio;
+					}
+		        	
+
+
+			/*BUSCAR EN AUDIO POR TEMA*/
+
+		        tema_audio:
+		        	
+		        	pos_puntero=0;
+					pos_busqueda=0;
+					found=0;
+					
+					//abrimos el archivo
+					archivo= fopen(nombrearchivo, "rb");
+					
+					// coloca el puntero en la primera posicion del archivo
+					rewind(archivo);
+					
+					while (1)
+					{
+						fread(&general1,sizeof(general),1,archivo);
+						
+						if(feof(archivo))
+						{
+							break;
+						}
+						
+						if(strcmp(general1.tipo, "audio") == 0)
+						{
+							if(strcmp(general1.tema, busq) == 0)
+							{
+								pos_puntero = ftell(archivo);
+								pos_busqueda = pos_puntero - (sizeof(general1));
+								
+								fseek(archivo, pos_busqueda, SEEK_CUR);
+								
+								printf("   %s, ",general1.tema);
+								printf("%s, ",general1.titulo);
+								printf("%s, ",general1.autors);
+								printf("%s, ",general1.formato);
+								printf("%s\n",general1.duracion);
+								
+								found++;
+							}
+						}
+					}
+					
+					if(found!=0)
+					{			
+						printf("\n =================================================");
+						printf("\n\t\t\tVIDEOS");
+						printf("\n =================================================\n");
+						printf("\n  (Tema, Titulo, Autor, Formato, Duracion.)");
+						printf("\n   ---------------------------------------\n\n");
+						
+						//Cierro el archivo
+						fclose(archivo);
+						
+		        		goto tema_video;				
+					}
+					
+					else
+					{
+					printf("   No hay registros en AUDIOS para este tema.\n");	
+									
+						//Cierro el archivo
+						fclose(archivo);
+									
+					    goto tema_video;
+					}
+		        	
+
+			/*BUSCAR EN VIDEO POR TEMA*/
+
+		        tema_video:
+		        	
+		        	pos_puntero=0;
+					pos_busqueda=0;
+					found=0;
+					
+					//abrimos el archivo
+					archivo= fopen(nombrearchivo, "rb");
+					
+					// coloca el puntero en la primera posicion del archivo
+					rewind(archivo);
+					
+					while (1)
+					{
+						fread(&general1,sizeof(general),1,archivo);
+						
+						if(feof(archivo))
+						{
+							break;
+						}
+						
+						if(strcmp(general1.tipo, "video") == 0)
+						{
+							if(strcmp(general1.tema, busq) == 0)
+							{
+								pos_puntero = ftell(archivo);
+								pos_busqueda = pos_puntero - (sizeof(general1));
+								
+								fseek(archivo, pos_busqueda, SEEK_CUR);
+								
+								printf("   %s, ",general1.tema);
+								printf("%s, ",general1.titulo);
+								printf("%s, ",general1.autors);
+								printf("%s, ",general1.formato);
+								printf("%s\n",general1.duracion);
+								
+								found++;
+							}
+						}
+					}
+					
+					if(found!=0)
+					{			
+						printf("\n =================================================");
+						printf("\n\t\t\t URIS");
+						printf("\n =================================================\n");
+						printf("\n  (Tema, Titulo, Autor, Uri, Idioma.)");
+						printf("\n   ---------------------------------\n\n");
+						
+						//Cierro el archivo
+						fclose(archivo);
+						
+		        		goto tema_uri;				
+					}
+					
+					else
+					{
+						printf("   No hay registros en VIDEOS para este tema.\n");
+									
+						//Cierro el archivo
+						fclose(archivo);
+									
+					    goto tema_uri;
+					}
+		        	
+					
+
+			/*BUSCAR EN URI POR TEMA*/
+
+		        tema_uri:
+		        	
+		        	pos_puntero=0;
+					pos_busqueda=0;
+					found=0;
+					
+					//abrimos el archivo
+					archivo= fopen(nombrearchivo, "rb");
+					
+					// coloca el puntero en la primera posicion del archivo
+					rewind(archivo);
+					
+					while (1)
+					{
+						fread(&general1,sizeof(general),1,archivo);
+						
+						if(feof(archivo))
+						{
+							break;
+						}
+						
+						if(strcmp(general1.tipo, "uri") == 0)
+						{
+							if(strcmp(general1.tema, busq) == 0)
+							{
+								pos_puntero = ftell(archivo);
+								pos_busqueda = pos_puntero - (sizeof(general1));
+								
+								fseek(archivo, pos_busqueda, SEEK_CUR);
+								
+								printf("   %s, ",general1.tema);
+								printf("%s, ",general1.titulo);
+								printf("%s, ",general1.autors);
+								printf("%s, ",general1.uri);
+								printf("%s\n",general1.idioma);
+								
+								found++;
+							}
+						}
+					}
+					
+					if(found==0)
+					{			
+						printf("   No hay registros en URIS para este tema.\n");
+						fclose(archivo);				
+					}
+					
+					fclose(archivo);				
 		        
-		        
-		break;
+		break; 
+
+		
+		defalut:
+			printf("Ha ingresado un numero no valido\n");
+			break;
 
   }
 
@@ -1349,26 +1736,26 @@ int main (void)
 									goto menu_busqueda;
 									break;
 									
-							case '2':	// buscar por TITULO
+							case 2:	// buscar por TITULO
 									buscar(opc_busqueda);
 									getch();
 									goto menu_busqueda;
 									break;
 									
-							case '3':	// buscar por TEMA
+							case 3:	// buscar por TEMA
 									buscar(opc_busqueda);
 									getch();
 									goto menu_busqueda;
 									break;
 												
-							case '0': 
+							case 0: 
 									break;
 								
 					}
 					
 			break;
 		
-			case '2':
+			case 2:
 					
 					menu_admin:
 					system ("cls"); 
@@ -1380,7 +1767,7 @@ int main (void)
 					//Menu Administracion Recursos
 					switch(opc_admin) 
 					{
-						case '1':
+						case 1:
 								menu_admin_agregar:
 								system ("cls"); 
         
@@ -1390,43 +1777,43 @@ int main (void)
 
 			        			switch(opc_admin_agrear)
 								{
-									case '1':	// Crear recurso LIBRO
+									case 1:	// Crear recurso LIBRO
 											crear_recurso(opc_admin_agrear);
 											getch();
 											goto menu_admin_agregar;
 											break;
 
-									case '2':	// Crear recurso MONOGRAFIA
+									case 2:	// Crear recurso MONOGRAFIA
 											crear_recurso(opc_admin_agrear);
 											getch();
 											goto menu_admin_agregar;
 											break;
 
-									case '3':	// Crear recurso ARTICULO
+									case 3:	// Crear recurso ARTICULO
 											crear_recurso(opc_admin_agrear);
 											getch();
 											goto menu_admin_agregar;
 											break;
 
-									case '4':	// Crear recurso AUDIO
+									case 4:	// Crear recurso AUDIO
 											crear_recurso(opc_admin_agrear);
 											getch();
 											goto menu_admin_agregar;
 											break;
 											
-									case '5':	// Crear recurso VIDEO
+									case 5:	// Crear recurso VIDEO
 											crear_recurso(opc_admin_agrear);
 											getch();
 											goto menu_admin_agregar;
 											break;
 											
-									case '6':	// Crear recurso URI
+									case 6:	// Crear recurso URI
 											crear_recurso(opc_admin_agrear);
 											getch();
 											goto menu_admin_agregar;
 											break;
 												
-									case '0': 
+									case 0: 
 											goto menu_admin;
 											break;
 								}
@@ -1437,7 +1824,7 @@ int main (void)
 					
 			break;
 					
-			case '3':
+			case 3:
 					
 					menu_config:
 					system ("cls"); 
@@ -1449,7 +1836,7 @@ int main (void)
 					//Menu Configuracion Biblioteca
 					switch(opc_config) 
 					{
-						case '1':
+						case 1:
 								system ("cls");
 								
 								menu_config_tipos();
@@ -1466,7 +1853,7 @@ int main (void)
         						
 								break;
 								
-						case '2':
+						case 2:
 								system ("cls");
 								
 								menu_config_metadatos();
@@ -1487,7 +1874,7 @@ int main (void)
 			break;
 						
 			defalut:
-			printf("Ha ingresado un numero no valido\n");
+					printf("Ha ingresado un numero no valido\n");
 			break;			
 
 		}
@@ -1495,4 +1882,3 @@ int main (void)
 	
 	getch();
 }
-
